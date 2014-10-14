@@ -1,16 +1,8 @@
 <?php
-	$url="localhost";
-	$user_name="root";
-	$db_password="password";
-	$db_name="cs2102";
-	$con=mysqli_connect($url, $user_name, $db_password, $db_name);
+	include 'db_connect.php';
 
-	// Check connection
-	if (mysqli_connect_errno()) {
-	  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-	// Create connection
-	$url="localhost";
-	} else {
+	if($con){
+
 		$result_array= array();
 
 		$country_array = array();
