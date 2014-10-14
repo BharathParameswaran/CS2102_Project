@@ -1,0 +1,218 @@
+<html>
+<head>
+<link rel = "stylesheet" type="text/css" href="css/bootstrap.css"/>
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type='text/javascript'>
+    $(function(){
+      // When your page loads, hide all of your tables except the first (selected by default)
+      $("table:not(:first)").hide();
+      
+      // Wire up your change event for your DropDownList
+      $("[name$=room]").change(function(){
+        // Display the specfic table by matching the selected value with the ID of your table
+        $("#" + $(this).val()).show();
+
+      });
+    })
+  </script>
+
+<meta charset="utf-8">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+
+</head>
+<div class="row">
+  <div class="col-md-12"><h2 class="bg-primary"><p class="text-left">HotelBooking.com</p></h2>
+  </div>
+  
+</div>
+
+<div class="row">
+  <div class="col-md-1"> </div>
+  <div class="col-md-10"><a href=""><p class="text-right">Sign In</p></a></div>
+  <div class="col-md-1"> </div>
+</div> 
+
+<div class="row">
+  <div class="col-md-4"> 
+  	<form role="form">
+  <div class="form-group">
+    <label for="searchLabel">Destination/Hotel Name :</label>
+    <input type="text" class="form-control" id="searchInput" placeholder="e.g. city, region, district or specific hotel">
+  </div>
+  <div class="form-group">
+    <label for="checkInLabel">Check-In Date :</label>
+    <input type="text" class="form-control" id="datepicker">
+    <label for="checkOutLabel">Check-Out Date :</label>
+    <input type="text" class="form-control" id="datepicker1">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox">I don't have specific dates yet
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="roomLabel">Room :</label>
+    <select name="room" id="room" onchange="change()">
+  		<option value="1">1</option>
+  		<option value="2">2</option>
+  		<option value="3">3</option>
+  		<option value="4">4</option>
+  		<option value="5">5</option>
+	</select>
+  </div>
+  <div class="form-group">
+  	<table id="1" class="table table-striped">
+  		<tr>
+    	<td><label for="roomNo1Label">Room 1 :</label></td>
+    	<td><label for="adult1Label">Adults :</label>
+    		<select name="adult1" >
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+  			<option value="4">4</option>
+  			<option value="5">5</option>
+  			<option value="6">6</option>
+  			<option value="7">7</option>
+  			<option value="8">8</option>
+			</select>
+		</td>
+		<td><label for="child1Label">Children :</label>
+   			<select name="children1">
+   			<option value="0">0</option>
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+			</select>
+		</td>
+</tr>
+</table>
+	<table id="2" class="table table-striped">
+  		<tr>
+    	<td><label for="room2Label">Room 2 :</label></td>
+    	<td><label for="adult2Label">Adults :</label>
+    		<select name="adult2">
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+  			<option value="4">4</option>
+  			<option value="5">5</option>
+  			<option value="6">6</option>
+  			<option value="7">7</option>
+  			<option value="8">8</option>
+			</select>
+		</td>
+		<td><label for="child2Label">Children :</label>
+   			<select name="children2">
+   			<option value="0">0</option>
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+			</select>
+		</td>
+		</tr>
+	</table>
+	<table id="3" class="table table-striped">
+  		<tr>
+    	<td><label for="room3Label">Room 3 :</label></td>
+    	<td><label for="adult3Label">Adults :</label>
+    		<select name="adult3">
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+  			<option value="4">4</option>
+  			<option value="5">5</option>
+  			<option value="6">6</option>
+  			<option value="7">7</option>
+  			<option value="8">8</option>
+			</select>
+		</td>
+		<td><label for="child3Label">Children :</label>
+   			<select name="children3">
+   			<option value="0">0</option>
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+			</select>
+		</td>
+		</tr>
+	</table>
+	<table id="4" class="table table-striped">
+  		<tr>
+    	<td><label for="room4Label">Room 4 :</label></td>
+    	<td><label for="adult4Label">Adults :</label>
+    		<select name="adult4">
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+  			<option value="4">4</option>
+  			<option value="5">5</option>
+  			<option value="6">6</option>
+  			<option value="7">7</option>
+  			<option value="8">8</option>
+			</select>
+		</td>
+		<td><label for="child4Label">Children :</label>
+   			<select name="children4">
+   			<option value="0">0</option>
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+			</select>
+		</td>
+		</tr>
+	</table>
+	<table id="5" class="table table-striped">
+  		<tr>
+    	<td><label for="room5Label">Room 5 :</label></td>
+    	<td><label for="adult5Label">Adults :</label>
+    		<select name="adult5">
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+  			<option value="4">4</option>
+  			<option value="5">5</option>
+  			<option value="6">6</option>
+  			<option value="7">7</option>
+  			<option value="8">8</option>
+			</select>
+		</td>
+		<td><label for="child5Label">Children :</label>
+   			<select name="children5">
+   			<option value="0">0</option>
+  			<option value="1">1</option>
+  			<option value="2">2</option>
+  			<option value="3">3</option>
+			</select>
+		</td>
+		</tr>
+	</table>
+
+  </div>
+
+  <p class="text-right"><button type="submit" class="btn btn-primary">Search</button></p>
+</form>
+  </div>
+  <div class="col-md-8"> <img src="../CS2102_Project/hotelRoom.jpg" alt="Hotel" class="img-rounded" style="width:800px;height:450px"> 
+  </div>
+</div> 
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10"><p class ="text-right">Sort By : 
+  <button type="button" class="btn btn-default">Most Popular</button>
+  <button type="button" class="btn btn-default">Rating</button>
+  <button type="button" class="btn btn-default">Price</button>
+  </p>
+  </div>
+  <div class="col-md-1"></div>
+</div> 
+ 
+</html>
