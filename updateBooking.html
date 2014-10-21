@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel = "stylesheet" type="text/css" href="css/lib/bootstrap.css">
+<link rel = "stylesheet" type="text/css" href="css/lib/jquery-ui.css">
+<script src="js/lib/jquery-2.1.0.js"></script>
+<script src = "js/lib/jquery-ui.js"></script>
+<script>
+
+	function refreshTable() {
+		userId = 2;
+		url = "php/getBooking.php?userId=" + userId;
+		jQuery.getJSON(url, function (data) {
+			updateTable(data);
+         });
+	}
+
+	function updateTable(data) {
+		$('#bookingTable tbody').remove();
+		for (i = 0; i < data.length; i++) {
+			$('#bookingTable').append('<tr><td>' + data[i].hName + '</td><td>' + data[i].room + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].guests + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButton' + data[i].bId + '" onclick="alterTable(' + data[i].bId + ')" value="Update"/><td><button onclick="cancelBooking(' + data[i].bId + ')">Cancel</button></td>');
+
+			$('#bookingTable').append('<tr id="row' + data[i].bId + '" style="display: none"><td></td><td></td><td></td><td><input type="text" class="form-control" id="datepicker' + data[i].bId + '"" value="' + data[i].checkInDate + '">' + '</td><td><input type="text" id="duration' + data[i].bId + '" value="' + data[i].duration + '"></td><td></td><td></td><td><button onclick="updateBooking(' + data[i].bId + ')">Confirm</button></td><td></td>');
+
+			$("#datepicker" + data[i].bId).datepicker({
+		       	dateFormat: "yy-mm-dd"
+		    });
+		}
+	}
+
+	function cancelBooking(id) {
+		var r = confirm("Are you sure you want to cancel the booking?");
+		if (r == true) {
+		url = "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=cancel";
+		jQuery.getJSON(url, function (data) {
+			updateTable(data);
+         });
+		} 
+	}
+
+	function alterTable(id) {
+		if ( document.getElementById("updateButton" + id).value == "Update") {
+			document.getElementById("row" + id).style.display = "";
+			document.getElementById("updateButton" + id).value = "Hide";
+		} else {
+			document.getElementById("row" + id).style.display = "none";
+			document.getElementById("updateButton" + id).value = "Update";
+		}
+	} 
+
+	function updateBooking(id) {
+		var r = confirm("Are you sure you want to update the booking?");
+		if (r == true) {
+		url = "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("datepicker" + id).value + "&duration=" + document.getElementById("duration" + id).value;
+		jQuery.getJSON(url, function (data) {
+			updateTable(data);
+         });
+		} 
+
+	}
+
+</script>
+</head>
+<body onload="refreshTable()">
+	<div class="row">
+  		<div class="col-md-12"><h2 class="bg-primary"><p class="text-left">HotelBooking</p></h2></div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<table class="table table-striped table-bordered" id="bookingTable">
+		         <thead>
+		           <tr>
+		             <th>Hotel Name</th>
+		             <th>Room</th>
+		             <th>Booking Date</th>
+		             <th>Check In Date</th>
+		             <th>Duration</th>
+		             <th>Number of Guests</th>
+		             <th>Status</th>
+		             <th></th>
+		             <th></th>
+		           </tr>
+		         </thead>
+		         <tbody>
+		         </tbody>
+		    </table>
+		</div>
+	<div class="col-md-1"></div>
+	</div>
+
+ </body>
+</html>
