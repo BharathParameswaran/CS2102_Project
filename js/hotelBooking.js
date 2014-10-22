@@ -8,39 +8,51 @@ $(function() {
     });
 
     $('#createAcc').click(function(){
-        
+
 
     });
 
     $("#getSearchResult").click(function() {
 
         var errorString = "Please fill the following fields:</br>";
-        var errors = 1;
+        var errorString2 = "Check-in date must be before Check-out date</br>"
+        var errorCount1 = 1;
+        var errorCount2 = 1;
 
         var city = $("#searchInput").val();
         if (city == "") {
-            errorString += errors++ +".Location / Hotel name </br>";
+            errorString += errorCount1++ +".Location / Hotel name </br>";
         }
 
-        var date = $("#datepicker").datepicker("getDate");
-        if (date == null) {
-            errorString += errors++ +".Check-in date </br>";
+        var ciDate = $("#datepicker").datepicker("getDate");
+        if (ciDate == null) {
+            errorString += errorCount1++ +".Check-in date </br>";
         } else {
-            var checkInDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+            var checkInDate = ciDate.getFullYear() + '-' + ('0' + (ciDate.getMonth() + 1)).slice(-2) + '-' + ('0' + ciDate.getDate()).slice(-2);
         }
 
-        date = $("#datepicker1").datepicker("getDate");
-        if (date == null) {
-            errorString += errors++ +".Check-out date.";
+        var coDate = $("#datepicker1").datepicker("getDate");
+        if (coDate == null) {
+            errorString += errorCount1++ +".Check-out date.";
         } else {
-            var checkOutDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+            var checkOutDate = coDate.getFullYear() + '-' + ('0' + (coDate.getMonth() + 1)).slice(-2) + '-' + ('0' + coDate.getDate()).slice(-2);
+            if(checkInDate && (ciDate > coDate)){
+            errorString += "Check-in date must be before check-out date</br>";
+            errorCount2++;
+            }
         }
 
-        if (errors != 1) {
+        if (errorCount1 != 1) {
 
             $('.alert-success').children('span').html(errorString);
             $('.alert-success').slideDown(500).delay(2000).slideUp(500);
-        } else {
+        }
+        else if(errorCount2 !=1){
+             $('.alert-success').children('span').html(errorString2);
+            $('.alert-success').slideDown(500).delay(2000).slideUp(500);
+
+        }
+         else {
 
             $.ajax({
                 type: "GET",
@@ -50,16 +62,19 @@ $(function() {
                 success: function(result) {
                     result = JSON.parse(result);
 
-                    if (result['status'] == 'ok') {} else {
+                    if (result['status'] == 'ok') {
+                        console.log(result);
+                        showHotels();           
+                    } else {
 
                     }
                 }
             });
         }
-
-        console.log(city);
-        console.log(checkInDate);
-        console.log(checkOutDate);
     });
 
 });
+
+var showHotels = function(){
+
+};
