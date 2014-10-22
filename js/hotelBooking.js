@@ -7,6 +7,11 @@ $(function() {
         dateFormat: "dd-mm-yy"
     });
 
+    $('#createAcc').click(function(){
+        
+
+    });
+
     $("#getSearchResult").click(function() {
 
         var errorString = "Please fill the following fields:</br>";
