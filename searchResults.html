@@ -1,9 +1,42 @@
-
-  <div id="searchResults">
+<div id="searchResults">
   <div id="searchFilter">
-  
+    <div class="col-md-2">
+      <form role="form">
+        <div class="form-group">
+          <label for="search">Location / Hotel Name :</label>
+          <input type="text" class="form-control" id="search" placeholder="e.g. country, street or specific hotel">
+        </div>
+        <div class="form-group">
+          <label for="checkInLabel">Check-In Date :</label>
+          <input type="text" class="form-control" id="checkIn">
+          <label for="checkOutLabel">Check-Out Date :</label>
+          <input type="text" class="form-control" id="checkOut">
+        </div>
+      </form>
+
+      <form role="form">
+
+        <div class="form-group">
+         <label for="rating">Rating :</label>
+          <input type="text" id="rating" readonly style="border:0; color:#f6931f; font-weight:bold;">
+          <div id="rating-slider"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Price range :</label>
+          <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+          <div id="amount-slider"></div>
+        </div>
+
+        <p class="text-right">
+          <button id="searchWithFilter" class="btn btn-primary">Filter Results</button>
+        </p>
+
+      </form>
+
+    </div>
   </div>
-  <div id="hotels">
+  <div id="hotels" class="col-md-5">
 
   </div>
-  </div>
+</div>
