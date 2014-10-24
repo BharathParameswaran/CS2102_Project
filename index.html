@@ -1,54 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel = "stylesheet" type="text/css" href="css/lib/bootstrap.css">
-<link rel = "stylesheet" type="text/css" href="css/lib/jquery-ui.css">
-<script src="js/lib/jquery-2.1.0.js"></script>
-<script src = "js/lib/jquery-ui.js"></script>
-<script src = "js/hotelBooking.js"></script>
-<link link rel = "stylesheet" type="text/css" href="css/style.css">
+<link rel="import" id="homePage" href="home.html">
+<link rel="import" id="resultsPage" href="searchResults.html">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui.css">
+  <script src="js/lib/jquery-2.1.0.js"></script>
+  <script src="js/lib/jquery-ui.js"></script>
+  <script src="js/hotelBooking.js"></script>
+  <link link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
 <body>
-<div class="row">
-  <div class="col-md-12"><h2 class="bg-primary"><p class="text-left">HotelBooking</p></h2>
-  </div>
-  
-</div>
+  <div id="heading">
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="bg-primary"><p class="text-left">HotelBooking</p></h2>
+      </div>
 
-<div class="row">
-  <div class="col-md-4 col-md-offset-10"><a href="" class = "sign-in-button" id="createAcc">Create Account</a>
-  <a href="" class = "sign-in-button" id="signIn">Sign In</a></div>
-</div> 
+    </div>
+    </div>
 
- <div class="col-md-8"> <img src="images/hotelRoom.jpg" alt="Hotel" class="img-rounded" style="width:95%;height:70%"> 
-  </div>
+</body>
 
-  <div class="col-md-4"> 
-  	<form role="form">
-  <div class="form-group">
-    <label for="searchLabel">Location / Hotel Name :</label>
-    <input type="text" class="form-control" id="searchInput" placeholder="e.g. country, street or specific hotel">
-  </div>
-  <div class="form-group">
-    <label for="checkInLabel">Check-In Date :</label>
-    <input type="text" class="form-control" id="datepicker">
-    <label for="checkOutLabel">Check-Out Date :</label>
-    <input type="text" class="form-control" id="datepicker1">
-  </div>
-  </form>
-  
-  <p class="text-right"><button id="getSearchResult" class="btn btn-primary">Search</button></p>
-
-  </div>
-  <div class="row">
-  <div class="col-md-2 alert alert-success" style="display: none;">
-      <strong></strong>
-      <span></span>
-  </div>
-  </div>
- 
-
-
- </body>
 </html>
