@@ -11,15 +11,36 @@
       
     });
 
+    $("#datepicker2").datepicker({
+      dateFormat: "dd-mm-yy",
+      minDate: 1,
+      defaultDate: 1,
+      
+    });
+
     $('#datepicker').on('change', function(){
       createCheckoutDatePicker('#datepicker', '#datepicker1');
     });
 
 
     $('#createAcc').click(function() {
-
-
+        showSignUp();
     });
+
+    $('#confirmBooking').click(function() {
+        showConfirmBooking();
+    });
+
+    $('#goBack').click(function() {
+        showGoBack();
+    });
+
+    $('#signIn').click(function() {
+      var email = $('#signInEmail').val();
+      var password = $('#signInPassword').val();
+     
+    });
+
 
     $("#getSearchResult").click(function() {
      var city = $('#searchInput').val();
@@ -154,6 +175,27 @@
     $('#home').hide();
     var link = document.querySelector('link[id=resultsPage]');
     var content = link.import.querySelector('#searchResults');
+    document.body.appendChild(document.importNode(content, true)); 
+  };
+
+  var showSignUp = function() {
+    $('#home').hide();
+    var link = document.querySelector('link[id=signUpPage]');
+    var content = link.import.querySelector('#signUp');
+    document.body.appendChild(document.importNode(content, true)); 
+  };
+
+  var showConfirmBooking = function() {
+    $('#home').hide();
+    var link = document.querySelector('link[id=confirmBookingPage]');
+    var content = link.import.querySelector('#confirmBooking');
+    document.body.appendChild(document.importNode(content, true)); 
+  };
+
+  var showGoBack = function() {
+    $('#home').hide();
+    var link = document.querySelector('link[id=homePage]');
+    var content = link.import.querySelector('#home');
     document.body.appendChild(document.importNode(content, true)); 
   };
 
