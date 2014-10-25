@@ -12,17 +12,7 @@
     });
 
     $('#datepicker').on('change', function(){
-      var min = $(this).val();
-      console.log(min);
-      if(min > $( "#datepicker1" ).val())
-        $( "#datepicker1" ).val("");
-    $( "#datepicker1" ).datepicker( "destroy" );
-    $("#datepicker1").datepicker({
-      dateFormat: "dd-mm-yy",
-      minDate: min,
-      defaultDate: min
-    });
-
+      createCheckoutDatePicker('#datepicker', '#datepicker1');
     });
 
 
@@ -50,11 +40,20 @@
               console.log(result);
               showHotels();
                   $("#checkIn").datepicker({
-                    dateFormat: "dd-mm-yy"
+                    dateFormat: "dd-mm-yy",
+                     minDate: 1,
+                     defaultDate: 1,
+                     showOptions: { direction: "up" }
                   });
-                  $("#checkOut").datepicker({
-                    dateFormat: "dd-mm-yy"
-                  });
+
+                   $("#checkOut").datepicker({
+                      dateFormat: "dd-mm-yy",
+                      minDate:  checkInDate
+                    });
+                 
+                 $('#checkIn').on('change', function(){
+                  createCheckoutDatePicker('#checkIn', '#checkOut');
+                });
 
               $('#search').val(city);
               $('#checkIn').val(formatDate(checkInDate));
@@ -87,6 +86,19 @@
         });
       }
     });
+
+  $('#searchWithFilter').click(function(){
+
+     var city = $('#search').val();
+     var checkInDate = $('#checkIn').datepicker("getDate");
+     var checkOutDate = $('#checkOut').datepicker("getDate");
+     var errorCount1=  validateInput(city, checkInDate, checkOutDate);
+     console.log(errorCount1);
+     if(errorCount1==1){
+
+     }
+
+  });
 
 
   var validateInput = function(city, ciDate, coDate){
@@ -123,6 +135,18 @@
   var formatDate = function(date){
       return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
   };
+
+  var createCheckoutDatePicker = function(checkin, checkout){
+     var min = $(checkin).val();
+      if(min > $( checkout ).val())
+        $(checkout).val("");
+    $( checkout ).datepicker( "destroy" );
+    $(checkout).datepicker({
+      dateFormat: "dd-mm-yy",
+      minDate: min,
+      defaultDate: min
+    });
+  }
 
   });
 
