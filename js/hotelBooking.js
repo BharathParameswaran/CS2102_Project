@@ -224,3 +224,33 @@
     $( "#rating" ).val( "$" + $( "#rating-slider" ).slider( "values", 0 ) +
       " - $" + $( "#rating-slider" ).slider( "values", 1 ) );
 };
+
+$("#signIn").click(function() {
+     var email = $('#signInEmail').val();
+      var password = $('#signInPassword').val();
+
+
+      if (errorCount1 == 1) {
+
+        $.ajax({
+          type: "GET",
+          url: "php/login.php",
+          data: "email=" + email + "&password=" + password,
+
+          success: function(result) {
+            result = JSON.parse(result);
+              console.log(result);
+
+
+            if (result['uId'] == '') {
+            
+               $('#loginfail').html("Wrong Email or Password, Please try again.");
+
+              });
+             else {
+        
+         $('#loginpass').html("Login Successful");
+                             
+            }
+      }
+    });
