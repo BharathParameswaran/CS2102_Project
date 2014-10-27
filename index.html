@@ -1,58 +1,30 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript">
-		function updateDropdownList() {
-	          url = "php/get_initial_value.php";
-	          jQuery.getJSON(url, function (data) {
-	          	country_array = data.country;
-				var country_dd_list = document.getElementById("country");
-	          	for (i = 0; i < country_array.length; i++) {
-				    var option = document.createElement('option');
-				    option.text = country_array[i];
-				    option.value = country_array[i];
-				    country_dd_list.add(option);
-	          	}
-
-	          	facility_array = data.facility;
-	          	var facility_div = document.getElementById('facility_div');
-	          	for (i = 0; i < facility_array.length; i++) {
-					facility_div.innerHTML = facility_div.innerHTML + "<input type=\"checkbox\" name=\"facility\" id=\"" + facility_array[i] + "\" value=\"" + facility_array[i] + "\">" + "<label for=\"" + facility_array[i] + "\">" + facility_array[i] + "</label>";
-					if ( i%4 == 3) {
-						facility_div.innerHTML += "<br>";
-					}
-	          	}
-
-	          	room_array = data.category;
-	          	var room_div = document.getElementById('room_div');
-	          	for (i = 0; i < room_array.length; i++) {
-					room_div.innerHTML = room_div.innerHTML + "<input type=\"checkbox\" name=\"facility\" id=\"" + room_array[i] + "\" value=\"" + room_array[i] + "\">" + "<label for=\"" + room_array[i] + "\">" + room_array[i] + "</label>";
-	          	}
-	          });
-
-
-
-		}
-	</script>
+<link rel="import" id="homePage" href="home.html">
+<link rel="import" id="resultsPage" href="searchResults.html">
+<link rel="import" id="signUpPage" href="signUp.html">
+<link rel="import" id="confirmBookingPage" href="confirmBooking.html">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/lib/jquery-ui.css">
+  <script src="js/lib/jquery-2.1.0.js"></script>
+  <script src="js/lib/jquery-ui.js"></script>
+  <script src="js/hotelBooking.js"></script>
+  <link link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
-<body onload="updateDropdownList()">
-	<div style="border: 2px solid #a1a1a1;
-	    padding: 10px 40px; 
-	    background: #dddddd;
-	    width: 500px;
-	    border-radius: 25px">
-		<form name="hotel_search_form" action="search_hotel.php" method="get">
-			Location name: <input type="text" name="location"><br>
-			Country: <select id="country" name="country"></select><br>
-			Facility: <div id="facility_div"></div>
-			Room: <div id="room_div"></div>
+<body>
+  <div id="heading">
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="bg-primary"><p class="text-left">HotelBooking</p></h2>
+      </div>
 
+    </div>
+    </div>
 
-			<input type="submit" value="Submit">
-		</form>
-	</div>
 </body>
 
 </html>
