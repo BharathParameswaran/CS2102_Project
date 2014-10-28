@@ -1,3 +1,8 @@
 .sign-in-button{
 	padding-left: 20px;
 }
+
+.list-group-modified {
+	height: 400px;
+	overflow-y: auto;
+}

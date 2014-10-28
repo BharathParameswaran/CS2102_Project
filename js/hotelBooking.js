@@ -18,7 +18,6 @@
     var errorString2 = ""
     var errors = 1;
 
-
     if (city == "") {
       errorString += errors++ +".Location / Hotel name </br>";
     }
@@ -61,53 +60,53 @@
           result = JSON.parse(result);
           console.log(result);
           showHotels();
-          $("#checkIn").datepicker({
-            dateFormat: "dd-mm-yy",
-            minDate: 1,
-            defaultDate: 1,
-            showOptions: {
-              direction: "up"
-            }
+
+          copyOldValues(city, checkInDate, checkOutDate);
+
+          var searchButton = $('#searchWithFilter');
+          searchButton.before($('<ul>').addClass('list-group list-group-modified').attr('id', 'facility-list'));
+          var list = $('#facility-list');
+          var facilities = result['facilities'];
+
+          $.each(facilities, function(index) {
+            var option = $('<input>').attr('type', 'checkBox')
+              .attr('name', 'facility')
+              .attr('id', 'facOption' + facilities[index]['id'])
+              .attr('value', facilities[index]['id']);
+
+            var label = $('<label>')
+              .attr('for', 'facOption' + facilities[index]['id'])
+              .html('  ' + facilities[index]['name'] + '  ').append(option);
+
+            var listElement = $('<li>').addClass('list-group-item')
+              .append(label);
+
+            list.append(listElement);
           });
 
-          $("#checkOut").datepicker({
-            dateFormat: "dd-mm-yy",
-            minDate: checkInDate
+
+          var categories = result['categories'];
+          var categorySelect = $('#roomCategory');
+
+          $.each(categories, function(i) {
+            var option = $('<option>')
+              .attr('id', categories[i]['id'])
+              .html(categories[i]['name']);
+            categorySelect.append(option);
+
           });
-
-          $('#checkIn').on('change', function() {
-            createCheckoutDatePicker('#checkIn', '#checkOut');
-          });
-
-          $('#search').val(city);
-          $('#checkIn').val(formatDate(checkInDate));
-          $('#checkOut').val(formatDate(checkOutDate));
-          addRangeSelector();
-
-
+          $("#roomCategory").prop("selectedIndex", -1);
           if (result['status'] == 'ok') {
 
-            var hotels = result['answer'];
-            var hotelsDiv = $('<ul>').addClass('list-group');
-            $.each(hotels, function(index) {
+            updateResults(result['answer']);
 
-              var hotel = $('<div>').addClass('list-group-item-heading').attr('id', hotels[index]['id'])
-                .append($('<a>').html(hotels[index]['name']));
-              hotel.append($('<div>').addClass('row')
-                .append($('<p>').addClass('col-md-6').html(hotels[index]['street'] + ", " + hotels[index]['country']))
-                .append($('<p>').addClass('col-md-6').html("Rooms available: " + hotels[index]['emptyRooms'])));
-
-              hotel.append($('<p>').html(hotels[index]['rating'] + "/5"));
-              var listElement = $('<li>').addClass('list-group-item').append(hotel);
-              hotelsDiv.append(listElement);
-            });
-            $('#hotels').append(hotelsDiv);
           } else if (result['status'] == 'empty') {
 
             $('#hotels').html("No results found. Try refining your search!");
           }
         }
       });
+
     }
   }
 
@@ -123,7 +122,12 @@
     $(checkout).datepicker({
       dateFormat: "dd-mm-yy",
       minDate: min,
-      defaultDate: min
+      defaultDate: min,
+      beforeShow: function() {
+        setTimeout(function() {
+          $('.ui-datepicker').css('z-index', 99);
+        }, 0);
+      }
     });
   }
 
@@ -133,9 +137,59 @@
     var checkInDate = $('#checkIn').datepicker("getDate");
     var checkOutDate = $('#checkOut').datepicker("getDate");
     var errorCount1 = validateInput(city, checkInDate, checkOutDate);
-    if (errorCount1 == 1) {
 
+    if (errorCount1 == 1) {
+      var facReq = "";
+      var numSelected = 0;
+      $(':checkbox:checked').each(function(i) {
+        facReq += parseInt($(this).val()) + '|';
+        numSelected++;
+      });
+      facReq = facReq.substring(0, facReq.length - 1);
+
+      $('#hotels').empty();
+      $("#progressbar").progressbar({
+        value: false
+      });
+
+      $.ajax({
+        type: "GET",
+        url: "php/getFilteredHotels.php",
+        data: "string=" + city + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate + "&pMin=" + $('#amount-slider').slider('values')[0] + "&pMax=" + $('#amount-slider').slider('values')[1] + "&rMin=" + $('#rating-slider').slider('values')[0] + "&rMax=" + $('#rating-slider').slider('values')[1] + "&fac=" + facReq + "&numF=" + numSelected + "&cat=" + $('#roomCategory').children(":selected").attr("id"),
+
+        success: function(result) {
+          console.log(result);
+          result = JSON.parse(result);
+          $("#progressbar").progressbar("destroy");
+          if (result['status'] == 'ok') {
+            updateResults(result['answer']);
+
+          } else {
+            $('#hotels').html("No results found. Try refining your search!");
+          }
+
+        }
+
+      });
     }
+  }
+
+  var updateResults = function(hotels) {
+    var hotelsDiv = $('<ul>').addClass('list-group list-group-modified');
+    $.each(hotels, function(index) {
+
+      var hotel = $('<div>').addClass('list-group-item-heading').attr('id', hotels[index]['id'])
+        .append($('<a>').html(hotels[index]['name']));
+      hotel.append($('<div>').addClass('row')
+        .append($('<p>').addClass('col-md-6').html(hotels[index]['street'] + ", " + hotels[index]['country']))
+        .append($('<p>').addClass('col-md-6').html("Rooms available: " + hotels[index]['emptyRooms'])));
+
+      hotel.append($('<p>').html(hotels[index]['rating'] + "/5"));
+      var listElement = $('<li>').addClass('list-group-item').append(hotel);
+      hotelsDiv.append(listElement);
+    });
+    $('#hotels').append(hotelsDiv);
+
   }
 
   var showHotels = function() {
@@ -144,8 +198,45 @@
     var content = link.import.querySelector('#searchResults');
     document.body.appendChild(document.importNode(content, true));
     $('#searchWithFilter').bind('click', filterResults);
+    $('#checkIn').on('change', function() {
+      createCheckoutDatePicker('#checkIn', '#checkOut');
+    });
+
+    $("#checkIn").datepicker({
+      dateFormat: "dd-mm-yy",
+      minDate: 1,
+      defaultDate: 1,
+      showOptions: {
+        direction: "up"
+      },
+      beforeShow: function() {
+        setTimeout(function() {
+          $('.ui-datepicker').css('z-index', 99);
+        }, 0);
+      }
+    })
 
   };
+
+  var copyOldValues = function(city, checkInDate, checkOutDate) {
+
+    $("#checkOut").datepicker({
+      dateFormat: "dd-mm-yy",
+      minDate: checkInDate,
+      beforeShow: function() {
+        setTimeout(function() {
+          $('.ui-datepicker').css('z-index', 99);
+        }, 0);
+      }
+    })
+
+
+    $('#search').val(city);
+    $('#checkIn').val(formatDate(checkInDate));
+    $('#checkOut').val(formatDate(checkOutDate));
+    addRangeSelector();
+
+  }
 
 
   var showConfirmBooking = function() {
@@ -203,7 +294,7 @@
       range: true,
       min: 0,
       max: 500,
-      values: [200, 300],
+      values: [000, 500],
       slide: function(event, ui) {
         $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
       }
@@ -215,11 +306,11 @@
       range: true,
       min: 0,
       max: 5,
-      values: [3, 5],
+      values: [0, 5],
       slide: function(event, ui) {
         $("#rating").val("$" + ui.values[0] + " - $" + ui.values[1]);
       }
     });
-    $("#rating").val("$" + $("#rating-slider").slider("values", 0) +
-      " - $" + $("#rating-slider").slider("values", 1));
+    $("#rating").val($("#rating-slider").slider("values", 0) +
+      " - " + $("#rating-slider").slider("values", 1));
   };

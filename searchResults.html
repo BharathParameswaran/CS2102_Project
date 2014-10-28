@@ -1,7 +1,7 @@
-<div id="searchResults">
-  <div id="searchFilter">
-    <div class="col-md-2">
-      <form role="form">
+<div id="searchResults" class="row">
+  <div id="filter" class="col-md-4">
+  <div id="searchFilter" class="col-md-6">
+
         <div class="form-group">
           <label for="search">Location / Hotel Name :</label>
           <input type="text" class="form-control" id="search" placeholder="e.g. country, street or specific hotel">
@@ -12,7 +12,13 @@
           <label for="checkOutLabel">Check-Out Date :</label>
           <input type="text" class="form-control" id="checkOut">
         </div>
-      </form>
+
+         <div class="form-group">
+          <label for="roomCategory">Room Type :</label>
+          <select class="form-control" id="roomCategory">
+          </select>
+        </div>
+
 
         <div class="form-group">
          <label for="rating">Rating :</label>
@@ -26,21 +32,20 @@
           <div id="amount-slider"></div>
         </div>
 
-        <p class="text-right">
-          <button id="searchWithFilter" class="btn btn-primary">Filter Results</button>
-        </p>
-
       <div class="col-md-12 alert alert-success warnings" style="display: none;">
         <strong></strong>
         <span></span>
       </div>
+      </div>
+  <div id="facilities" class = "col-md-6">
+    <p class="text-right">
+          <button id="searchWithFilter" class="btn btn-primary">Filter Results</button>
+    </p>
+  </div>
     </div>
-
-  </div>
-  <div id="facilities" class = "col-md-5">
-  
-  </div>
-  <div id="hotels" class="col-md-5">
+  <div id="hotels-returned" class="col-md-5">
+    <div id="progressbar"></div> 
+    <div id="hotels"> </div>
 
   </div>
 </div>
