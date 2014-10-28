@@ -114,6 +114,10 @@
     return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
   };
 
+  var formatToDisplay = function(date) {
+    return ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear();
+  };
+
   var createCheckoutDatePicker = function(checkin, checkout) {
     var min = $(checkin).val();
     if (min > $(checkout).val())
@@ -232,8 +236,8 @@
 
 
     $('#search').val(city);
-    $('#checkIn').val(formatDate(checkInDate));
-    $('#checkOut').val(formatDate(checkOutDate));
+    $('#checkIn').val(formatToDisplay(checkInDate));
+    $('#checkOut').val(formatToDisplay(checkOutDate));
     addRangeSelector();
 
   }
