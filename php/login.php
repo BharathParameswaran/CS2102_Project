@@ -4,6 +4,7 @@ if($con){
 
 	$reply = array();
 $reply['status'] = 'Fail';
+$reply['uId'] = -1;
 $Username = $_GET['username'];
 $Password = $_GET['pass'];
 

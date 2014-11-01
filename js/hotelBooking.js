@@ -8,6 +8,8 @@
   
   });
 
+  var loginUId = -1;
+
   var validateInput = function(city, ciDate, coDate) {
 
     var errorString = "Please fill the following fields:</br>";
@@ -194,6 +196,7 @@
 
   var showHotels = function() {
     $('#home').hide();
+    
     var link = document.querySelector('link[id=resultsPage]');
     var content = link.import.querySelector('#searchResults');
     document.body.appendChild(document.importNode(content, true));
@@ -218,11 +221,68 @@
 
   };
 
-  var showSignIn = function() {
-    $('#home').hide();
-    var link = document.querySelector('link[id=signInPage]');
-    var content = link.import.querySelector('#signIn');
-    document.body.appendChild(document.importNode(content, true));
+  var getBookingRecord = function(booking) {
+    var bookingsDiv = $('<ul>').addClass('list-group list-group-modified');
+    $.each(booking, function(index,value) {
+      console.log(value);
+      var bookings = $('<div>').addClass('list-group-item-heading').attr('bId', value['bId'])
+        .append($('<a>').html(booking[index]['hName']));
+      bookings.append($('<div>').addClass('row')
+        .append($('<p>').addClass('col-md-8').html(booking[index]['unitNo'] + ", " + booking[index]['street'] + ", " + booking[index]['country'] + " (" + booking[index]['postalCode'] + ")")));
+        bookings.append($('<p>').html("Hotel contact: " + booking[index]['contact']));
+        bookings.append($('<p>').html("Room Type: " + booking[index]['roomName']));
+        bookings.append($('<p>').html("Booking Date: " + booking[index]['bookingDate']));
+        bookings.append($('<p>').html("Check In Date: " + booking[index]['checkInDate']));
+        bookings.append($('<p>').html("Duration: " + booking[index]['duration'] + " days"));
+        bookings.append($('<p>').html("Room Price: " + booking[index]['roomPrice']));
+        bookings.append($('<p>').html("Total Price: " + booking[index]['totalPrice']));
+        bookings.append($('<p>').html("Status: " + booking[index]['status']));
+
+      var listElement = $('<li>').addClass('list-group-item').append(bookings);
+      bookingsDiv.append(listElement);
+    });
+    $('#bookingReturned').append(bookingsDiv);
+
+  }
+
+  var showBookingRecord = function(loginUId) {
+
+      $.ajax({
+        type: "GET",
+        url: "php/userBooking.php",
+        data: "uId=" + loginUId,
+
+        success: function(result) {
+          result = JSON.parse(result);
+
+          var rows = result['rows'];
+   
+
+          if (result['status'] == 'Empty') {
+            $('#editBooking').hide();
+            $('#bookingReturned').html("You have " + rows + " booking.");
+          }
+
+          if (result['status'] == 'Fail') {
+            $('#bookingReturned').html("Fail to get bookings. Rows = " + rows);
+          }
+
+          if (result['status'] == 'Success') {
+            $('#bookingReturned').html("You have " + rows + " booking.");
+            getBookingRecord(result['answer']);
+            
+          }
+          
+      }
+   });
+ 
+  }
+
+  var showLogout = function() {
+    loginUId = -1;
+    $('#signUp').hide();
+    $('#confirmBooking').hide();
+    showHome();
   };
 
   var copyOldValues = function(city, checkInDate, checkOutDate) {
@@ -249,20 +309,26 @@
   var showConfirmBooking = function() {
     $('#home').hide();
     $('#signUp').hide();
+    if (($.find('#confirmBooking')).length == 0) {
     var link = document.querySelector('link[id=confirmBookingPage]');
     var content = link.import.querySelector('#confirmBooking');
     document.body.appendChild(document.importNode(content, true));
+    $('#makeBooking').bind('click', showHome);
+    $('#logout').bind('click', showLogout);
+  }
+  else
+    $('#confirmBooking').show();
+
   };
 
   var showHome = function() {
 
     $('#signUp').hide();
+    $('#confirmBooking').hide();
     if (($.find('#home')).length == 0) {
       var link = document.querySelector('link[id=homePage]');
       var content = link.import.querySelector('#home');
-      document.body.appendChild(document.importNode(content, true));
-      $('#createAcc').bind('click', showSignUp);
-      $('#signIn').bind('click', showSignIn);
+      document.body.appendChild(document.importNode(content, true));    
 
       $("#datepicker").datepicker({
         dateFormat: "dd-mm-yy",
@@ -278,6 +344,17 @@
       $('#getSearchResult').bind('click', searchHotels);
     } else
       $('#home').show();
+
+      if(loginUId == -1){
+      $('#homeLogout').hide();
+      $('#createAcc').show();
+      $('#createAcc').bind('click', showSignUp);
+    }
+    else{
+      $('#homeLogout').show();
+       $('#homeLogout').bind('click', showLogout);
+      $('#createAcc').hide();
+    }
   };
 
   var showSignUp = function() {
@@ -334,11 +411,11 @@ var validateSignIn = function(username,password) {
 
 
     if (username == "") {
-      errorString += errors++ +".Location / Username </br>";
+      errorString += errors++ +". Username </br>";
     }
 
     if (password == "") {
-      errorString += errors++ +".Location / Password </br>";
+      errorString += errors++ +". Password </br>";
     }
 
     if (errors != 1) {
@@ -350,6 +427,7 @@ var validateSignIn = function(username,password) {
   }
 
   var signIn = function() {
+    $('#logout').bind('click', showLogout);
   
      var username = $('#signInUsername').val();
       var password = $('#signInPassword').val();
@@ -366,17 +444,16 @@ var validateSignIn = function(username,password) {
 
           success: function(result) {
             result = JSON.parse(result);
+              //show
               console.log(result);
 
-
-            if (result['status'] == 'Success') {
-              showConfirmBooking();
-
+            loginUId = result['uId'];
             var name = result['name'];
+            if (result['status'] == 'Success') {
+            showConfirmBooking();
             $('#displayName').html("Welcome " + name);
+            showBookingRecord(loginUId);
 
-            $('.alert-success').children('span').html("Welcome " + name);
-            $('.alert-success').slideDown(500);
 
           } else if (result['status'] == 'Fail') {
 
@@ -398,11 +475,11 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
     var errors = 1;
 
     if (name == "") {
-      errorString += errors++ +".Location / Name </br>";
+      errorString += errors++ +". Name </br>";
     }
 
     if (email == "") {
-      errorString += errors++ +".Location / Email </br>";
+      errorString += errors++ +". Email </br>";
     }
     if (dob == null) {
       errorString += errors++ +".Date of Birth </br>";
@@ -410,34 +487,34 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
       var checkInDate = formatDate(dob);
     }
     if (username == "") {
-      errorString += errors++ +".Location / Username </br>";
+      errorString += errors++ +". Username </br>";
     }
 
     if (password == "") {
-      errorString += errors++ +".Location / Password </br>";
+      errorString += errors++ +". Password </br>";
     }
 
     if (confirmPassword == "") {
-      errorString += errors++ +".Location / Confirm Password </br>";
+      errorString += errors++ +". Confirm Password </br>";
     }
 
     if (unitNo == "") {
-      errorString += errors++ +".Location / Unit Number </br>";
+      errorString += errors++ +". Unit Number </br>";
     }
     if (street == "") {
-      errorString += errors++ +".Location / Street Name </br>";
+      errorString += errors++ +". Street Name </br>";
     }
 
     if (country == "") {
-      errorString += errors++ +".Location / Country </br>";
+      errorString += errors++ +". Country </br>";
     }
 
     if (postal == "") {
-      errorString += errors++ +".Location / Postal Code </br>";
+      errorString += errors++ +". Postal Code </br>";
     }
 
     if (contact == "") {
-      errorString += errors++ +".Location / Contact Number </br>";
+      errorString += errors++ +". Contact Number </br>";
     }
 
     if (password != confirmPassword) {
