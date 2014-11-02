@@ -5,7 +5,6 @@ if($con){
 	$reply = array();
 $reply['status'] = 'Fail';
 
-$bId = $_GET['bId'];
 $uId = $_GET['uId'];
 $hId = $_GET['hId'];
 $roomNo = $_GET['roomNo'];
@@ -17,9 +16,9 @@ $status = $_GET['status'];
 
 
 
-$stmt = mysqli_prepare($con, "select bId from booking where bId = ?");
+$stmt = mysqli_prepare($con, "select bId from booking where uId = ? AND hId = ? AND roomNo = ? AND checkInDate = ?");
 
-mysqli_stmt_bind_param($stmt, 's', $bId);
+mysqli_stmt_bind_param($stmt, 'ssss', $uId, $hId, $roomNo, $checkInDate);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $bId);
 mysqli_stmt_fetch($stmt);

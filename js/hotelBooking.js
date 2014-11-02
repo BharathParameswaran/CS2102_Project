@@ -245,6 +245,7 @@
 
   }
 
+
   var showBookingRecord = function(loginUId) {
 
       $.ajax({
@@ -276,6 +277,52 @@
       }
    });
  
+  }
+
+  var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
+
+      $.ajax({
+        type: "GET",
+        url: "php/getBookingSummary.php",
+        data: "hId=" + hId + "&cId=" + cId,
+
+        success: function(result) {
+          result = JSON.parse(result);
+
+          var categoryName = result['cName'];
+          var price = result['price'];
+
+          if (result['status'] == 'Fail') {
+            $('#bookingDetails').html("Fail to get details.");
+          }
+
+          if (result['status'] == 'Success') {
+            $('#bookingDetails').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price);
+            getBookingDetails(result['answer']);
+            
+          }
+          
+      }
+   });
+ 
+  }
+
+  var getHotelDetails = function(hotelDetails) {
+    var hotelDiv = $('<ul>').addClass('list-group list-group-modified');
+    $(hotelDetails, function() {
+      var hotel = $('<div>').addClass('list-group-item-heading').attr('hId', hotelDetails['hId'])
+        .append($('<a>').html(hotelDetails[index]['hName']));
+      hotel.append($('<div>').addClass('row')
+        .append($('<p>').addClass('col-md-8').html(hotelDetails['unitNo'] + ", " + hotelDetails['street'] + ", " + hotelDetails['country'] + " (" + hotelDetails['postalCode'] + ")")));
+        hotel.append($('<p>').html("Hotel contact: " + hotelDetails['contact']));
+        hotel.append($('<p>').html("Hotel Rating: " + hotelDetails['rating']));
+      
+
+      var listElement = $('<li>').addClass('list-group-item').append(hotel);
+      hotelDiv.append(listElement);
+    });
+    $('#detailsReturned').append(hotelDiv);
+
   }
 
   var showLogout = function() {
@@ -320,6 +367,53 @@
     $('#confirmBooking').show();
 
   };
+
+  var showBookingDetails = function() {
+    $('#home').hide();
+    $('#signUp').hide();
+    $('#confirmBooking').hide();
+    if (($.find('#bookingDetails')).length == 0) {
+    var link = document.querySelector('link[id=bookingDetailsPage]');
+    var content = link.import.querySelector('#bookingDetails');
+    document.body.appendChild(document.importNode(content, true));
+    $('#makeBooking').bind('click', createBooking);
+    $('#cancelBooking').bind('click', showHome);
+    $('#bookingLogout').bind('click', showLogout);
+  }
+  else
+    $('#bookingDetails').show();
+
+  };
+
+
+  var createBooking = function(uId, hId, roomNo, bookingDate, checkInDate, duration, guests, status) {
+
+        $.ajax({
+          type: "GET",
+          url: "php/insertBooking.php",
+          data: "uId=" + uId + "&hId=" + hId + "&roomNo=" + roomNo + "&bookingDate=" + bookingDate + "&checkInDate=" + checkInDate
+          + "&duration=" + duration + "&guests=" + guests + "&status=" + status,
+
+          success: function(result) {
+            result = JSON.parse(result);
+            console.log(result);
+
+            if (result['status'] == 'Success') {
+            $('.alert-success').children('span').html("Your booking has been successfully made!");
+            $('.alert-success').slideDown(500);
+
+          } else if (result['status'] == 'Fail') {
+
+            $('.alert-success').children('span').html("Failed to make booking!");
+            $('.alert-success').slideDown(500);
+          }
+                             
+            }
+      
+    });
+      
+    
+};
 
   var showHome = function() {
 

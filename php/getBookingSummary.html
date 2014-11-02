@@ -32,8 +32,11 @@ mysqli_stmt_execute($statement);
 mysqli_stmt_bind_result($statement, $hId, $hName, $unitNo, $street, $country, $postal, $contact, $rating);
 mysqli_stmt_fetch($statement);
 
+	$result = array();
+
     if($hId != null ){
-       $hotel['status'] = 'Success';
+    	$hotel = array();
+       
 		$hotel['hName'] = $hName;
 		$hotel['unitNo'] = $unitNo;
 		$hotel['street'] = $street;
@@ -41,7 +44,10 @@ mysqli_stmt_fetch($statement);
 		$hotel['postal'] = $postal;
 		$hotel['contact'] = $contact;
 		$hotel['rating'] = $rating;
+		array_push($result, $hotel);
     }
+    $reply['answer'] = $result;
+
    
 
 }
