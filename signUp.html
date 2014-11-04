@@ -2,14 +2,12 @@
 
     <div class="row">
         <div class="col-md-4 col-md-offset-10">
-            <a class="sign-in-button" id="goBack">Back</a>
+            <a class="sign-in-button" id="goBack">Home</a>
         </div>
+
     </div>
 
-    <div class="col-md-8"> <img src="images/hotelRoom.jpg" alt="Hotel" class="img-rounded" style="width:95%;height:70%">
-    </div>
-
-    <div class="col-md-4">
+    <div class="col-md-8">
         <div class="tabs">
 
             <div class="tab">
@@ -18,24 +16,31 @@
 
                 <div class="content">
 
-                    <form role="form" name="login_form">
-
                         <div class="form-group">
 
                             <h4><font color="#428bca">Sign in to your account</font></h4>
                             <p>To personalise this site and manage your booking. </p>
-                            <label for="signInEmailLabel">Email :</label>
-                            <input type="text" class="form-control" id="signInEmail" placeholder="e.g. abc@hotmail.com">
+                            <table>
+                                <tr>
+                                    <th>Username : </th>
+                                    <th><input type="text" id="signInUsername" placeholder=""></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Password : </th>
+                                    <th><input type="password" id="signInPassword"></th>
+                                </tr>
+                               <tr><th><br></th><tr>
+                                <tr align="right">
+                                    <th><br></th>
+                                    <th><p class="text-right"><button id="signInBtn" class="btn btn-primary">Sign In</button></p> </th>
+                                </tr>
+                            </table>
+                            
+                           
                         </div>
-                        <div class="form-group">
-                            <label for="signInPasswordLabel" class="form-control">Password :</label>
-                            <input type="password" class="form-control" id="signInPassword">
-                        </div>
-                        <p class="text-right">
-                            <!--onclick="formhash(this.form, this.form.password);"-->
-                            <button id="signIn" class="btn btn-primary" >Sign In</button>
-                        </p>
-                    </form>
+                        
+                    
 
                 </div>
             </div>
@@ -47,74 +52,75 @@
 
                 <div class="content">
 
-                    <form role="form" name="registration_form">
+          
                         <div class="form-group">
 
                             <h4><font color="#428bca">No account yet? Sign Up Now!</font></h4>
                             <p>It's fast, free, and secure!</p>
-
-                            <label for="signUpNameLabel" class="form-control">Name :</label>
-                            <input type="text" class="form-control" id="signUpName">
-                        </div>
-                        <div class="form-group">
-                            <label for="signUpBirthLabel" class="form-control">Date of Birth :</label>
-                            <input type="text" class="form-control" id="datepicker2">
-                        </div>
-                        <div class="form-group">
-                            <label for="signUpEmailLabel" class="form-control">Email :</label>
-                            <input type="text" class="form-control" id="signUpEmail" placeholder="e.g. abc@hotmail.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="signUpUserLabel" class="form-control">Username :</label>
-                            <input type="text" class="form-control" id="signUpUsername">
-                        </div>
-                        <div class="form-group">
-                            <label for="signUpPasswordLabel" class="form-control">Password :</label>
-                            <input type="password" class="form-control" id="signUpPass">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-control" for="signUpUnitLabel">Unit No: </label>
-                            <input type="text" class="form-control" id="unitNo">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-control" for="signUpBlockLabel">Block No: </label>
-                            <input type="text" class="form-control" id="blockNo">
-                        </div>
-
-                        <div class="form-group">
-                             <label class="form-control" for="signUpStreetLabel">Street: </label>
-                             <input type="text" class="form-control" id="street">
-                        </div>
-
-                        <div class="form-group">
-                             <label class="form-control" for="signUpZipLabel">Zip Code: </label>
-                             <input type="text" class="form-control" id="zip">
-                        </div>
-
-                        <div class="form-group">
-                             <label class="form-control" for="signUpCountryLabel">Country: </label>
-                             <input type="text" class="form-control" id="country">
-                        </div>
-                    </div>
-
-
-                        <p class="text-right">
-                            <button id="signIn" class="btn btn-primary">Sign Up</button>
-                        </p>
-                    </form>
-                </div>
+                            <table>
+                                <tr>
+                                    <th>Name : </th>
+                                    <th><input type="text" class="form-control" id="signUpName"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th>Date of Birth : </th>
+                                    <th><input type="text" class="form-control" id="datepickerSignUp"></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Email : </th>
+                                    <th><input type="text" class="form-control" id="signUpEmail" placeholder="e.g. abc@hotmail.com"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th>Username : </th>
+                                    <th><input type="text" class="form-control" id="signUpUsername"></th>
+                                </tr>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Password : </th>
+                                    <th><input type="password" class="form-control" id="signUpPass"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th>Confirm Password : </th>
+                                    <th><input type="password" class="form-control" id="signUpConfirmPass"></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Unit No : </th>
+                                    <th><input type="text" class="form-control" id="unitNo"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th>Street Name: </th>
+                                    <th><input type="text" class="form-control" id="street"></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Country : </th>
+                                    <th><input type="text" class="form-control" id="country"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th>Postal Code : </th>
+                                    <th><input type="text" class="form-control" id="postal"></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+                                <tr>
+                                    <th>Contact Number : </th>
+                                    <th><input type="text" class="form-control" id="contact"></th>
+                                    <th>&nbsp;&nbsp;</th>
+                                    <th><br></th>
+                                    <th><p class="text-right"><button id="signUpBtn" class="btn btn-primary">Sign Up</button></p></th>
+                                </tr>
+                                <tr><th><br></th><tr>
+        
+                            </table>              
             </div>
-
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 alert alert-success" style="display: none;">
+        </div>    
+        </div>    
+<div class="row">
+        <div class="alert alert-success col-md-4 col-md-offset-12" style="display: none;">
             <strong></strong>
             <span></span>
         </div>
     </div>
+    </div>
+    </div>
+  
 
+    
 </div>

@@ -17,14 +17,6 @@ mysqli_stmt_bind_result($stmt, $id, $name,$unit, $street,$country, $postal,$cont
         $returnedHotel = array();
         $returnedHotel[0] = $id;
         $returnedHotel[1] = $name;
-        $returnedHotel[2] = $unit;
-        $returnedHotel[3] = $street;
-        $returnedHotel[4] = $country;
-        $returnedHotel[5] = $postal;
-        $returnedHotel[6] = $contact;
-        $returnedHotel[7] = $rating;
-        
-    	
     	array_push($result, $returnedHotel);
     }
     if($num_rows == 0){

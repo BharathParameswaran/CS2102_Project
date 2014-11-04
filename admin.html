@@ -34,18 +34,15 @@
             <input class="form-control" id='country' type="text"> Postal Code:
             <input class="form-control" id='code' type="text"> Contact:
             <input class="form-control" id='contact' type="text"> Rating:
-            <input class="form-control" id='rating' type="text"> Facilities:
-            <select class="form-control form-group facilities-list" multiple id="add-fac">
+            <input class="form-control" id='rating' type="text"> 
 
-            </select>
-
-            <button class="btn btn-success" id="add-hotel-button"> Add </button>
+            <button class="btn btn-success form-group" id="add-hotel-button"> Add </button>
           </div>
 
 
           <div class="tab-pane fade" id="modifyHotel">
             <select class="form-group form-control" id="modify-hotel">
-             <option selected="true" style="display:none;">Select a hotel</option>
+             
             </select>
 
             <div id = "hotel-details" style="display:none">
@@ -62,6 +59,7 @@
               </select>
 
             <button class="btn btn-primary" id="update-hotel-button"> Update </button>
+            
             </div>
           </div>
 
@@ -73,6 +71,10 @@
             <button class="btn btn-danger" id="delete-hotel-button"> Delete </button>
           </div>
         </div>
+          <div class="col-md-12 alert alert-success" style="display: none;">
+        <strong></strong>
+        <span></span>
+      </div>
       </div>
     </div>
   </div>
