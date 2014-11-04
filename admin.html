@@ -1,0 +1,79 @@
+
+
+
+<div id="admin">
+  <div class="col-md-12 panel panel-default description">
+    <p class="lead">
+      Admin Panel
+    </p>
+    <p>
+      The <strong> Admin panel </strong> lets you to add and/or modify hotels and bookings.
+    </p>
+  </div>
+
+  <div class="col-md-5" style="padding-top: 20px;">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Manage Hotels</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+          <li class="active"><a href="#addHotel">Add</a>
+          </li>
+          <li><a href="#modifyHotel">Modify</a>
+          </li>
+          <li><a href="#deleteHotel">Delete</a>
+          </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade in active" id="addHotel">
+            Name:
+            <input class="form-control" id='name' type="text"> Unit No:
+            <input class="form-control" id='unit' type="text"> Street:
+            <input class="form-control" id='street' type="text"> Country:
+            <input class="form-control" id='country' type="text"> Postal Code:
+            <input class="form-control" id='code' type="text"> Contact:
+            <input class="form-control" id='contact' type="text"> Rating:
+            <input class="form-control" id='rating' type="text"> Facilities:
+            <select class="form-control form-group facilities-list" multiple id="add-fac">
+
+            </select>
+
+            <button class="btn btn-success" id="add-hotel-button"> Add </button>
+          </div>
+
+
+          <div class="tab-pane fade" id="modifyHotel">
+            <select class="form-group form-control" id="modify-hotel">
+             <option selected="true" style="display:none;">Select a hotel</option>
+            </select>
+
+            <div id = "hotel-details" style="display:none">
+              Name:
+              <input class="form-control" id='name' type="text"> Unit No:
+              <input class="form-control" id='unit' type="text"> Street:
+              <input class="form-control" id='street' type="text"> Country:
+              <input class="form-control" id='country' type="text"> Postal Code:
+              <input class="form-control" id='code' type="text"> Contact:
+              <input class="form-control" id='contact' type="text"> Rating:
+              <input class="form-control" id='rating' type="text"> Facilities:
+              <select class="form-control form-group facilities-list" size = "10" multiple id="mod-fac">
+
+              </select>
+
+            <button class="btn btn-primary" id="update-hotel-button"> Update </button>
+            </div>
+          </div>
+
+
+          <div class="tab-pane fade" id="deleteHotel">
+            <select multiple class="form-control form-group" id="remove-hotel" size="15">
+
+            </select>
+            <button class="btn btn-danger" id="delete-hotel-button"> Delete </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
