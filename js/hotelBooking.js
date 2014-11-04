@@ -442,13 +442,12 @@ var showHome = function() {
 
   $('#signUp').hide();
   $('#confirmBooking').hide();
+  $('#admin').hide();
 
   if (($.find('#home')).length == 0) {
     var link = document.querySelector('link[id=homePage]');
     var content = link.import.querySelector('#home');
     document.body.appendChild(document.importNode(content, true));
-
-    $('#admin-panel').bind('click', showAdminPanel);
 
     $("#datepicker").datepicker({
       dateFormat: "dd-mm-yy",
@@ -500,6 +499,9 @@ var showSignUp = function() {
 
 var showAdminPanel = function() {
   $('#home').hide();
+  $('#signUp').hide();
+  $('#searchResults').hide();
+
 
   if (($.find('#admin')).length == 0) {
     var link = document.querySelector('link[id=adminPage]');
@@ -515,6 +517,7 @@ var showAdminPanel = function() {
       $('#update-hotel-button').bind('click', updateHotel);
       $('#delete-hotel-button').bind('click', deleteHotel);
       $('#add-hotel-button').bind('click', addHotel);
+        $('#adminLogout').bind('click', showHome);
 
   $('#myTab a').click(function(e) {
     e.preventDefault();
@@ -836,15 +839,20 @@ var signIn = function() {
         loginUId = result['uId'];
         var name = result['name'];
         if (result['status'] == 'Success') {
-          showConfirmBooking();
+          if(loginUId ==1)
+            showAdminPanel();
+          else
+         {showConfirmBooking();
+
           $('#displayName').html("Welcome " + name);
           showBookingRecord(loginUId);
+        }
 
 
         } else if (result['status'] == 'Fail') {
 
           $('.alert-success').children('span').html("Login Failed! Please enter correct email and password!");
-          $('.alert-success').slideDown(500);
+          $('.alert-success').slideDown(500).delay(3000).slideUp(500);
         }
 
       }
