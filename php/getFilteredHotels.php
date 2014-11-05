@@ -5,6 +5,7 @@ if($con){
 $reply['status'] = 'ok';
 $city = '%'.$_GET['string'].'%';
 $in = $_GET['checkInDate'];
+$out = $_GET['checkOutDate'];
 $pMin = $_GET['pMin'];
 $pMax = $_GET['pMax'];
 $rMin = $_GET['rMin'];
