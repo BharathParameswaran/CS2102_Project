@@ -284,7 +284,7 @@
       $.ajax({
         type: "GET",
         url: "php/getBookingSummary.php",
-        data: "hId=" + hId + "&cId=" + cId,
+        data: "hId=" + hId + "&cId=" + cId + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate,
 
         success: function(result) {
           result = JSON.parse(result);
@@ -565,8 +565,10 @@ var validateSignIn = function(username,password) {
 var validateSignUp = function(name, email, dob, username, password, confirmPassword, unitNo, street, country, postal, contact) {
 
     var errorString = "Please fill the following fields:</br>";
-    var errorString2 = "Password and Confirm Password do not match!"
+    var errorString2;
     var errors = 1;
+
+
 
     if (name == "") {
       errorString += errors++ +". Name </br>";
@@ -580,6 +582,7 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
     } else {
       var checkInDate = formatDate(dob);
     }
+
     if (username == "") {
       errorString += errors++ +". Username </br>";
     }
@@ -590,6 +593,10 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
 
     if (confirmPassword == "") {
       errorString += errors++ +". Confirm Password </br>";
+    }
+
+    if (password != confirmPassword) {
+      errorString += errors++ +". Password and Confirm Password do not match </br>";
     }
 
     if (unitNo == "") {
@@ -609,11 +616,6 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
 
     if (contact == "") {
       errorString += errors++ +". Contact Number </br>";
-    }
-
-    if (password != confirmPassword) {
-      $('.alert-success').children('span').html(errorString2);
-      $('.alert-success').slideDown(500).delay(3000).slideUp(500);
     }
 
     if (errors != 1) {
@@ -639,14 +641,14 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
       var contact = $('#contact').val();
       var errorCount1 = validateSignUp(name, email, dob, username, password, confirmPassword, unitNo, street, country, postal, contact);
 
-
+      var dateOfBirth = formatDate(dob);
 
       if (errorCount1 == 1) {
 
         $.ajax({
           type: "GET",
           url: "php/signUp.php",
-          data: "name=" + name + "&email=" + email + "&dob=" + dob + "&username=" + username + "&password=" + password + "&unitNo=" + unitNo
+          data: "name=" + name + "&email=" + email + "&dob=" + dateOfBirth + "&username=" + username + "&password=" + password + "&unitNo=" + unitNo
           + "&street=" + street + "&country=" + country + "&postal=" + postal + "&contact=" + contact,
 
           success: function(result) {
