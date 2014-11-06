@@ -268,7 +268,7 @@ var getBookingRecord = function(booking) {
   });
   $('#bookingReturned').append(bookingsDiv);
 
-}
+};
 
 
 var showBookingRecord = function(loginUId) {
@@ -302,7 +302,7 @@ var showBookingRecord = function(loginUId) {
     }
   });
 
-}
+};
 
 var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
 
@@ -375,7 +375,7 @@ var copyOldValues = function(city, checkInDate, checkOutDate) {
   $('#checkOut').val(formatToDisplay(checkOutDate));
   addRangeSelector();
 
-}
+};
 
 
 var showConfirmBooking = function() {
@@ -391,6 +391,23 @@ var showConfirmBooking = function() {
     $('#confirmBooking').show();
 
 };
+
+
+var showUpdateBooking = function() {
+  $('#home').hide();
+  $('#signUp').hide();
+  if (($.find('#updateBooking')).length == 0) {
+    var link = document.querySelector('link[id=updateBookingPage]');
+    var content = link.import.querySelector('#updateBooking');
+    document.body.appendChild(document.importNode(content, true));
+    $('#makeBooking').bind('click', showHome);
+    $('#logout').bind('click', showLogout);
+  } else {
+    $('#updateBooking').show();
+  }
+  refreshBookingTable();
+
+};  
 
 var showBookingDetails = function() {
   $('#home').hide();
@@ -442,6 +459,7 @@ var showHome = function() {
 
   $('#signUp').hide();
   $('#confirmBooking').hide();
+  $('#updateBooking').hide();
   $('#admin').hide();
 
   if (($.find('#home')).length == 0) {
@@ -493,6 +511,11 @@ var showSignUp = function() {
       defaultDate: 1,
 
     });
+    $("#signInPassword").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#signInBtn").click();
+    }
+});
   } else
     $('#signUp').show();
 };
@@ -512,6 +535,7 @@ var showAdminPanel = function() {
     $('#adminPanel').show();
 
       updateHotelDetails();
+      refreshBookingTableAdmin();
 
       $('#modify-hotel').bind('change', fillDetailsForHotel);
       $('#update-hotel-button').bind('click', updateHotel);
@@ -569,7 +593,7 @@ var addHotel = function(){
       }
     });
 }
-}
+};
 
 var deleteHotel = function() {
   var hotelsToDelete="";
@@ -691,7 +715,7 @@ var updateHotelDetails = function(){
     }
   });
       
-}
+};
 
 var validateHotelFields = function(id,name, unit, street, country, postal, contact, rating){
   var errorString = "Please correct the following errors: </br>";
@@ -736,7 +760,7 @@ var validateHotelFields = function(id,name, unit, street, country, postal, conta
 
   return errors;
 
-}
+};
 
 var fillDetailsForHotel = function() {
   var optionId = parseInt($(this).children(':selected').attr('id'));
@@ -813,7 +837,7 @@ var validateSignIn = function(username, password) {
   }
 
   return errors;
-}
+};
 
 var signIn = function() {
   $('#logout').bind('click', showLogout);
@@ -842,10 +866,12 @@ var signIn = function() {
           if(loginUId ==1)
             showAdminPanel();
           else
-         {showConfirmBooking();
+         {
+//          showConfirmBooking();
+            showUpdateBooking();
 
           $('#displayName').html("Welcome " + name);
-          showBookingRecord(loginUId);
+//          showBookingRecord(loginUId);
         }
 
 
@@ -922,7 +948,7 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
   }
 
   return errors;
-}
+};
 
 var signUp = function() {
 
@@ -972,6 +998,125 @@ var signUp = function() {
       }
 
     });
-  }
-
+  };
 };
+
+var refreshBookingTable = function() {
+  roomTypeData="";
+  url = "php/editBooking.php?userId=" + loginUId + "&bookingId=0" + "&action=getRoomType";
+  jQuery.getJSON(url, function (data) {
+    for (i = 0; i < data.length; i++) {
+      roomTypeData += "<option value=\"" + data[i].cId + "\">" + data[i].cname + "</option>";
+    }
+  });
+
+  url = "php/editBooking.php?userId=" + loginUId + "&bookingId=0" + "&action=getInitialDate";
+    jQuery.getJSON(url, function (data) {
+    updateTable(data, roomTypeData);
+  });
+};
+
+var refreshBookingTableAdmin = function() {
+
+//  hotelData="";
+//  url = "php/adminBooking.php?action=getHotelList";
+//  jQuery.getJSON(url, function (data) {
+//    for (i = 0; i < data.length; i++) {
+//      hotelData += "<option value=\"" + data[i].hId + "\">" + data[i].hName + "</option>";
+//    }
+//  });
+
+  url = "php/adminBooking.php?action=";
+    jQuery.getJSON(url, function (data) {
+    updateTableAdmin(data);
+  });
+};
+
+var updateTable = function(data, roomTypeData) {
+  $('#pendingBookingTable tbody').remove();
+  $('#pastBookingTable tbody').remove();
+  for (i = 0; i < data.length; i++) {
+    today = new Date();
+    checkInDate = new Date(data[i].checkInDate);
+    if (checkInDate >= today && data[i].status == "confirmed") {
+      $('#pendingBookingTable').append('<tr><td>' + data[i].hName + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].guests + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButton' + data[i].bId + '" class="btn btn-primary" onclick="alterTable(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBooking(' + data[i].bId + ')">Cancel</button></td>');
+
+      $('#pendingBookingTable').append('<tr id="row' + data[i].bId + '" style="display: none"><td></td><td>' + "<select id=\"roomType" + data[i].bId + "\">" + roomTypeData + "</select>" + '</td><td></td><td><input type="text" class="form-control" id="datepicker' + data[i].bId + '"" value="' + data[i].checkInDate + '"  size="10">' + '</td><td><input type="text" id="duration' + data[i].bId + '" value="' + data[i].duration + '" size="4"></td><td></td><td></td><td><button class="btn btn-primary" onclick="updateBooking(' + data[i].bId + ', ' + data[i].roomCatId + ')">Confirm</button></td><td></td>');
+
+      $("#datepicker" + data[i].bId).datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+      document.getElementById('roomType' + data[i].bId).value = data[i].roomCatId;
+    } else {
+      $('#pastBookingTable').append('<tr><td>' + data[i].hName + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].guests + '</td><td>' + data[i].status + '</td>');
+    }
+  }
+};
+
+var updateTableAdmin = function(data) {
+  $('#adminBookingTable tbody').remove();
+  $('#adminBookingTable tbody').remove();
+  for (i = 0; i < data.length; i++) {
+      $('#adminBookingTable').append('<tr><td>' + data[i].bId + '</td><td>' + data[i].uId + '</td><td>' + data[i].hName + '</td><td>' + data[i].roomNo + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButton' + data[i].bId + '" class="btn btn-primary" onclick="alterTable(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Cancel</button></td>');
+
+      $('#adminBookingTable').append('<tr id="row' + data[i].bId + '" style="display: none"><td></td><td></td><td></td><td></td><td></td><td></td><td><input type="text" class="form-control" id="admin_datepicker' + data[i].bId + '"" value="' + data[i].checkInDate + '"  size="10">' + '</td><td><input type="text" id="duration' + data[i].bId + '" value="' + data[i].duration + '" size="4"></td><td></td><td><button class="btn btn-primary" onclick="updateBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Confirm</button></td><td></td>');
+
+      $("#admin_datepicker" + data[i].bId).datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+  }
+};
+
+  var cancelBooking = function(id) {
+    var r = confirm("Are you sure you want to cancel the booking?");
+    if (r == true) {
+    url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=cancel";
+    jQuery.getJSON(url, function (data) {
+      updateTable(data);
+    });
+    } 
+  };
+
+  var cancelBookingAdmin = function(id, userId) {
+    var r = confirm("Are you sure you want to cancel the booking?");
+    if (r == true) {
+    url = "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=cancel";
+    jQuery.getJSON(url, function (data) {
+    });
+    refreshBookingTableAdmin();
+    } 
+  };
+
+  var alterTable = function(id) {
+    if ( document.getElementById("updateButton" + id).value == "Update") {
+      document.getElementById("row" + id).style.display = "";
+      document.getElementById("updateButton" + id).value = "Hide";
+    } else {
+      document.getElementById("row" + id).style.display = "none";
+      document.getElementById("updateButton" + id).value = "Update";
+    }
+  } ;
+
+  var updateBooking = function(id, originalRoomCat) {
+    var r = confirm("Are you sure you want to update the booking?");
+    if (r == true) {
+      url = "";
+      if (originalRoomCat != document.getElementById("roomType" + id).value) {
+        url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("datepicker" + id).value + "&duration=" + document.getElementById("duration" + id).value + "&roomType=" + document.getElementById("roomType" + id).value ;
+      } else {
+        url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("datepicker" + id).value + "&duration=" + document.getElementById("duration" + id).value + "&roomType=-1";
+      }
+    jQuery.getJSON(url, function (data) {
+      updateTable(data);
+         });
+    } 
+  };
+
+  var updateBookingAdmin = function(id, userId) {
+    var r = confirm("Are you sure you want to update the booking?");
+    if (r == true) {
+      url =  "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("admin_datepicker" + id).value + "&duration=" + document.getElementById("duration" + id).value + "&roomType=-1";
+      jQuery.getJSON(url, function (data) {});
+      refreshBookingTableAdmin();
+    } 
+  };
