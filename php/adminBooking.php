@@ -1,9 +1,5 @@
 <?php
-	$url="localhost";
-	$user_name="root";
-	$db_password="password";
-	$db_name="cs2102";
-	$con=mysqli_connect($url, $user_name, $db_password, $db_name);
+	include 'db_connect.php';
 
 	$action = $_GET["action"];
 	// Check connection
