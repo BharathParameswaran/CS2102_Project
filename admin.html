@@ -12,41 +12,26 @@
     </p>
   </div>
 
-  <div class="col-md-5" style="padding-top: 20px;">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Manage Hotels</h3>
-      </div>
-      <div class="panel-body">
-        <ul class="nav nav-tabs" role="tablist" id="myTab">
-          <li class="active"><a href="#addHotel">Add</a>
-          </li>
-          <li><a href="#modifyHotel">Modify</a>
-          </li>
-          <li><a href="#deleteHotel">Delete</a>
-          </li>
-        </ul>
-        <div id="myTabContent" class="tab-content">
-          <div class="tab-pane fade in active" id="addHotel">
-            Name:
-            <input class="form-control" id='name' type="text"> Unit No:
-            <input class="form-control" id='unit' type="text"> Street:
-            <input class="form-control" id='street' type="text"> Country:
-            <input class="form-control" id='country' type="text"> Postal Code:
-            <input class="form-control" id='code' type="text"> Contact:
-            <input class="form-control" id='contact' type="text"> Rating:
-            <input class="form-control" id='rating' type="text"> 
-
-            <button class="btn btn-success form-group" id="add-hotel-button"> Add </button>
-          </div>
-
-
-          <div class="tab-pane fade" id="modifyHotel">
-            <select class="form-group form-control" id="modify-hotel">
-             
-            </select>
-
-            <div id = "hotel-details" style="display:none">
+  <div class="row">
+    <div class="col-md-1" style="padding-top: 20px;"></div>
+    <div class="col-md-10" style="padding-top: 20px;">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Manage Hotels</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li class="active"><a href="#addHotel">Add</a>
+            </li>
+            <li><a href="#modifyHotel">Modify</a>
+            </li>
+            <li><a href="#deleteHotel">Delete</a>
+            </li>
+            <li><a href="#manageBooking">Manage Booking</a>
+            </li>
+          </ul>
+          <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="addHotel">
               Name:
               <input class="form-control" id='name' type="text"> Unit No:
               <input class="form-control" id='unit' type="text"> Street:
@@ -54,29 +39,78 @@
               <input class="form-control" id='country' type="text"> Postal Code:
               <input class="form-control" id='code' type="text"> Contact:
               <input class="form-control" id='contact' type="text"> Rating:
-              <input class="form-control" id='rating' type="text"> Facilities:
-              <select class="form-control form-group facilities-list" size = "10" multiple id="mod-fac">
+              <input class="form-control" id='rating' type="text"> 
 
+              <button class="btn btn-success form-group" id="add-hotel-button"> Add </button>
+            </div>
+
+
+            <div class="tab-pane fade" id="modifyHotel">
+              <select class="form-group form-control" id="modify-hotel">
+               
               </select>
 
-            <button class="btn btn-primary" id="update-hotel-button"> Update </button>
-            
+              <div id = "hotel-details" style="display:none">
+                Name:
+                <input class="form-control" id='name' type="text"> Unit No:
+                <input class="form-control" id='unit' type="text"> Street:
+                <input class="form-control" id='street' type="text"> Country:
+                <input class="form-control" id='country' type="text"> Postal Code:
+                <input class="form-control" id='code' type="text"> Contact:
+                <input class="form-control" id='contact' type="text"> Rating:
+                <input class="form-control" id='rating' type="text"> Facilities:
+                <select class="form-control form-group facilities-list" size = "10" multiple id="mod-fac">
+
+                </select>
+
+              <button class="btn btn-primary" id="update-hotel-button"> Update </button>
+              
+              </div>
             </div>
+
+
+            <div class="tab-pane fade" id="deleteHotel">
+              <select multiple class="form-control form-group" id="remove-hotel" size="15">
+
+              </select>
+              <button class="btn btn-danger" id="delete-hotel-button"> Delete </button>
+            </div>
+
+
+            <div class="tab-pane fade" id="manageBooking">
+              <div class="row">
+                <div class="col-md-12" style="height: 350px; overflow: scroll;">
+                  <table class="table table-bordered" id="adminBookingTable">
+                         <thead>
+                           <tr>
+                             <th>Booking Id</th>
+                             <th>User Id</th>
+                             <th>Hotel Name</th>
+                             <th>Room No</th>
+                             <th>Room Type</th>
+                             <th>Booking Date</th>
+                             <th width="150">Check In Date</th>
+                             <th>Duration</th>
+                             <th>Status</th>
+                             <th></th>
+                             <th></th>
+                           </tr>
+                         </thead>
+                         <tbody>
+                         </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+
           </div>
-
-
-          <div class="tab-pane fade" id="deleteHotel">
-            <select multiple class="form-control form-group" id="remove-hotel" size="15">
-
-            </select>
-            <button class="btn btn-danger" id="delete-hotel-button"> Delete </button>
-          </div>
+            <div class="col-md-12 alert alert-success" style="display: none;">
+          <strong></strong>
+          <span></span>
         </div>
-          <div class="col-md-12 alert alert-success" style="display: none;">
-        <strong></strong>
-        <span></span>
-      </div>
+        </div>
       </div>
     </div>
   </div>
+
 </div>
