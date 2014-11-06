@@ -293,16 +293,9 @@ var showBookingRecord = function(loginUId) {
         $('#bookingReturned').html("Fail to get bookings. Rows = " + rows);
       }
 
-
-      $.ajax({
-        type: "GET",
-        url: "php/getBookingSummary.php",
-        data: "hId=" + hId + "&cId=" + cId + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate,
-
       if (result['status'] == 'Success') {
         $('#bookingReturned').html("You have " + rows + " booking.");
         getBookingRecord(result['answer']);
-
 
       }
 
@@ -316,7 +309,7 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
   $.ajax({
     type: "GET",
     url: "php/getBookingSummary.php",
-    data: "hId=" + hId + "&cId=" + cId,
+    data: "hId=" + hId + "&cId=" + cId + "&checkInDate=" + checkInDate + "&checkOutDate=" + checkOutDate,
 
     success: function(result) {
       result = JSON.parse(result);
@@ -330,7 +323,7 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
 
       if (result['status'] == 'Success') {
         $('#bookingDetails').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price);
-        getBookingDetails(result['answer']);
+        getHotelDetails(result['answer']);
 
       }
 
@@ -516,7 +509,7 @@ var showAdminPanel = function() {
     document.body.appendChild(document.importNode(content, true));
 
   } else
-    $('#adminPanel').show();
+    $('#admin').show();
 
       updateHotelDetails();
 
@@ -524,13 +517,18 @@ var showAdminPanel = function() {
       $('#update-hotel-button').bind('click', updateHotel);
       $('#delete-hotel-button').bind('click', deleteHotel);
       $('#add-hotel-button').bind('click', addHotel);
-        $('#adminLogout').bind('click', showHome);
+        $('#adminLogout').bind('click', adminLogout);
 
   $('#myTab a').click(function(e) {
     e.preventDefault();
     $(this).tab('show');
   });
 };
+
+var adminLogout = function(){
+  loginUId = -1;
+  showHome();
+}
 
 var addHotel = function(){
 
@@ -947,20 +945,12 @@ var signUp = function() {
   var errorCount1 = validateSignUp(name, email, dob, username, password, confirmPassword, unitNo, street, country, postal, contact);
   var dateOfBirth = formatDate(dob);
 
-
-
-        $.ajax({
-          type: "GET",
-          url: "php/signUp.php",
-          data: "name=" + name + "&email=" + email + "&dob=" + dateOfBirth + "&username=" + username + "&password=" + password + "&unitNo=" + unitNo
-          + "&street=" + street + "&country=" + country + "&postal=" + postal + "&contact=" + contact,
-
   if (errorCount1 == 1) {
 
     $.ajax({
       type: "GET",
       url: "php/signUp.php",
-      data: "name=" + name + "&email=" + email + "&dob=" + dob + "&username=" + username + "&password=" + password + "&unitNo=" + unitNo + "&street=" + street + "&country=" + country + "&postal=" + postal + "&contact=" + contact,
+      data: "name=" + name + "&email=" + email + "&dob=" + dateOfBirth + "&username=" + username + "&password=" + password + "&unitNo=" + unitNo + "&street=" + street + "&country=" + country + "&postal=" + postal + "&contact=" + contact,
 
       success: function(result) {
         result = JSON.parse(result);
