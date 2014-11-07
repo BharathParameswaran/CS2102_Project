@@ -386,6 +386,7 @@ var showConfirmBooking = function() {
     var content = link.import.querySelector('#confirmBooking');
     document.body.appendChild(document.importNode(content, true));
     $('#makeBooking').bind('click', showHome);
+    $('#editBooking').bind('click', showUpdateBooking);
     $('#logout').bind('click', showLogout);
   } else
     $('#confirmBooking').show();
@@ -394,14 +395,15 @@ var showConfirmBooking = function() {
 
 
 var showUpdateBooking = function() {
+  $('#confirmBooking').hide();
   $('#home').hide();
   $('#signUp').hide();
   if (($.find('#updateBooking')).length == 0) {
     var link = document.querySelector('link[id=updateBookingPage]');
     var content = link.import.querySelector('#updateBooking');
     document.body.appendChild(document.importNode(content, true));
-    $('#makeBooking').bind('click', showHome);
-    $('#logout').bind('click', showLogout);
+    $('#makeBookingUpdatePage').bind('click', showHome);
+    $('#logoutUpdatePage').bind('click', showLogout);
   } else {
     $('#updateBooking').show();
   }
@@ -876,11 +878,11 @@ var signIn = function() {
             showAdminPanel();
           else
          {
-//          showConfirmBooking();
-            showUpdateBooking();
+          showConfirmBooking();
+//            showUpdateBooking();
 
           $('#displayName').html("Welcome " + name);
-//          showBookingRecord(loginUId);
+          showBookingRecord(loginUId);
         }
 
 
@@ -1048,7 +1050,7 @@ var updateTable = function(data, roomTypeData) {
       });
       document.getElementById('roomType' + data[i].bId).value = data[i].roomCatId;
     } else {
-      $('#pastBookingTable').append('<tr><td>' + data[i].hName + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].guests + '</td><td>' + data[i].status + '</td>');
+      $('#pastBookingTable').append('<tr><td>' + data[i].hName + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].guests + '</td><td>' + data[i].status + '</td><td><button class="btn btn-primary" onclick="deleteBooking(' + data[i].bId + ')">Delete</button></td>');
     }
   }
 };
@@ -1057,7 +1059,7 @@ var updateTableAdmin = function(data) {
   $('#adminBookingTable tbody').remove();
   $('#adminBookingTable tbody').remove();
   for (i = 0; i < data.length; i++) {
-      $('#adminBookingTable').append('<tr><td>' + data[i].bId + '</td><td>' + data[i].uId + '</td><td>' + data[i].hName + '</td><td>' + data[i].roomNo + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButtonAdmin' + data[i].bId + '" class="btn btn-primary" onclick="alterTableAdmin(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Cancel</button></td>');
+      $('#adminBookingTable').append('<tr><td>' + data[i].bId + '</td><td>' + data[i].uId + '</td><td>' + data[i].hName + '</td><td>' + data[i].roomNo + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButtonAdmin' + data[i].bId + '" class="btn btn-primary" onclick="alterTableAdmin(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Cancel</button></td><td><button class="btn btn-primary" onclick="deleteBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Delete</button></td>');
 
       $('#adminBookingTable').append('<tr id="rowAdmin' + data[i].bId + '" style="display: none"><td></td><td></td><td></td><td><input type="text" id="roomNo' + data[i].bId + '" value="' + data[i].roomNo + '" size="1"></td><td></td><td></td><td><input type="text" class="form-control" id="admin_datepicker' + data[i].bId + '"" value="' + data[i].checkInDate + '"  size="10">' + '</td><td><input type="text" id="durationAdmin' + data[i].bId + '" value="' + data[i].duration + '" size="1"></td><td></td><td colspan = "2"><button class="btn btn-primary" onclick="updateBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ', ' + data[i].roomNo + ')">Confirm</button></td>');
 
@@ -1067,12 +1069,32 @@ var updateTableAdmin = function(data) {
   }
 };
 
+  var deleteBooking = function(id) {
+    var r = confirm("Are you sure you want to delete the booking?");
+    if (r == true) {
+    url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=delete";
+    jQuery.getJSON(url, function (data) {
+      updateTable(data);
+    });
+    } 
+  };
+
   var cancelBooking = function(id) {
     var r = confirm("Are you sure you want to cancel the booking?");
     if (r == true) {
     url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=cancel";
     jQuery.getJSON(url, function (data) {
       updateTable(data);
+    });
+    } 
+  };
+
+  var deleteBookingAdmin = function(id, userId) {
+    var r = confirm("Are you sure you want to delete the booking?");
+    if (r == true) {
+    url = "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=delete";
+    jQuery.getJSON(url, function (data) {
+      refreshBookingTableAdmin();
     });
     } 
   };
