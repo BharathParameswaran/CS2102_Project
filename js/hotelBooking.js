@@ -4,6 +4,7 @@ $(function() {
 });
 
 var loginUId = -1;
+var loginUsername="";
 
 var validateInput = function(city, ciDate, coDate) {
 
@@ -199,14 +200,15 @@ var updateResults = function(hotels) {
 var hotelSelected = function(event){
   var checkOutDate = event.data[1];
   var checkInDate = event.data[0];
-  var cid = event.data[2];
+  var cid = parseInt(event.data[2]);
   var hid = parseInt($(this).attr('id'));
+  showHotelDetails(hid, cid, checkInDate, checkOutDate);
 
 }
 
 var showHotels = function() {
   $('#home').hide();
-
+  $('#bookingDetails').hide();
   if ($.find('#searchResults').length == 0) {
     var link = document.querySelector('link[id=resultsPage]');
     var content = link.import.querySelector('#searchResults');
@@ -268,7 +270,7 @@ var getBookingRecord = function(booking) {
   });
   $('#bookingReturned').append(bookingsDiv);
 
-};
+}
 
 
 var showBookingRecord = function(loginUId) {
@@ -302,7 +304,7 @@ var showBookingRecord = function(loginUId) {
     }
   });
 
-};
+}
 
 var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
 
@@ -313,16 +315,23 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
 
     success: function(result) {
       result = JSON.parse(result);
-
-      var categoryName = result['cName'];
-      var price = result['price'];
+      console.log(result);
 
       if (result['status'] == 'Fail') {
         $('#bookingDetails').html("Fail to get details.");
       }
 
       if (result['status'] == 'Success') {
-        $('#bookingDetails').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price);
+        var room = result['rooms'];
+        var index = 0;
+        var roomNo = room[index]['roomNo'];
+        var categoryName = room[index]['cName'];
+        var price = room[index]['price'];
+        showBookingDetails();
+        if (loginUsername != ""){
+        $('#bookingDisplayName').html("Welcome " + loginUsername);
+        }
+        $('#detailsReturned').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price);
         getHotelDetails(result['answer']);
 
       }
@@ -334,13 +343,13 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
 
 var getHotelDetails = function(hotelDetails) {
   var hotelDiv = $('<ul>').addClass('list-group list-group-modified');
-  $(hotelDetails, function() {
-    var hotel = $('<div>').addClass('list-group-item-heading').attr('hId', hotelDetails['hId'])
+  $.each(hotelDetails, function(index) {
+    var hotel = $('<div>').addClass('list-group-item-heading').attr('hId', hotelDetails[index]['hId'])
       .append($('<a>').html(hotelDetails[index]['hName']));
     hotel.append($('<div>').addClass('row')
-      .append($('<p>').addClass('col-md-8').html(hotelDetails['unitNo'] + ", " + hotelDetails['street'] + ", " + hotelDetails['country'] + " (" + hotelDetails['postalCode'] + ")")));
-    hotel.append($('<p>').html("Hotel contact: " + hotelDetails['contact']));
-    hotel.append($('<p>').html("Hotel Rating: " + hotelDetails['rating']));
+      .append($('<p>').addClass('col-md-8').html(hotelDetails[index]['unitNo'] + ", " + hotelDetails[index]['street'] + ", " + hotelDetails[index]['country'] + " (" + hotelDetails[index]['postalCode'] + ")")));
+    hotel.append($('<p>').html("Hotel contact: " + hotelDetails[index]['contact']));
+    hotel.append($('<p>').html("Hotel Rating: " + hotelDetails[index]['rating']));
 
 
     var listElement = $('<li>').addClass('list-group-item').append(hotel);
@@ -352,6 +361,7 @@ var getHotelDetails = function(hotelDetails) {
 
 var showLogout = function() {
   loginUId = -1;
+  loginUsername = "";
   $('#signUp').hide();
   $('#confirmBooking').hide();
   showHome();
@@ -375,12 +385,13 @@ var copyOldValues = function(city, checkInDate, checkOutDate) {
   $('#checkOut').val(formatToDisplay(checkOutDate));
   addRangeSelector();
 
-};
+}
 
 
 var showConfirmBooking = function() {
   $('#home').hide();
   $('#signUp').hide();
+  $('#bookingDetails').hide();
   if (($.find('#confirmBooking')).length == 0) {
     var link = document.querySelector('link[id=confirmBookingPage]');
     var content = link.import.querySelector('#confirmBooking');
@@ -424,17 +435,35 @@ var showBookingDetails = function() {
     var link = document.querySelector('link[id=bookingDetailsPage]');
     var content = link.import.querySelector('#bookingDetails');
     document.body.appendChild(document.importNode(content, true));
-    $('#makeBooking').bind('click', createBooking);
-    $('#cancelBooking').bind('click', showHome);
+    $('#confirmMakeBooking').bind('click', createBooking);
+    $('#cancelBooking').bind('click', showHotels);
     $('#bookingLogout').bind('click', showLogout);
-  } else
+    $('#bookingCreateAcc').bind('click', showSignUp);
+  } else {
     $('#bookingDetails').show();
+  }
+  if(loginUId==-1){
+    $('#bookingLogout').hide();
+     $('#bookingCreateAcc').show();
+     $('#bookingCreateAcc').bind('click', showSignUp);
+  }
+  else{
+    $('#bookingCreateAcc').hide();
+    $('#bookingLogout').show();
+    $('#bookingLogout').bind('click', showLogout);
 
+  }
 };
 
 
 var createBooking = function(uId, hId, roomNo, bookingDate, checkInDate, duration, guests, status) {
 
+  if(loginUId == -1)
+    {
+        $('.alert-success').children('span').html("Please Sign In Before Confirm Booking!");
+        $('.alert-success').slideDown(500).delay(3000).slideUp(500);
+    }
+    else{
   $.ajax({
     type: "GET",
     url: "php/insertBooking.php",
@@ -445,18 +474,20 @@ var createBooking = function(uId, hId, roomNo, bookingDate, checkInDate, duratio
       console.log(result);
 
       if (result['status'] == 'Success') {
-        $('.alert-success').children('span').html("Your booking has been successfully made!");
-        $('.alert-success').slideDown(500);
+        $('.alert-success').children('span').html("Congratulation! Your booking has been successfully made!");
+        $('.alert-success').slideDown(500).delay(3000).slideUp(500);
 
       } else if (result['status'] == 'Fail') {
 
         $('.alert-success').children('span').html("Failed to make booking!");
-        $('.alert-success').slideDown(500);
+        $('.alert-success').slideDown(500).delay(3000).slideUp(500);
+
       }
 
     }
 
   });
+}
 
 
 };
@@ -465,8 +496,8 @@ var showHome = function() {
 
   $('#signUp').hide();
   $('#confirmBooking').hide();
-  $('#updateBooking').hide();
   $('#admin').hide();
+  $('#bookingDetails').hide();
 
   if (($.find('#home')).length == 0) {
     var link = document.querySelector('link[id=homePage]');
@@ -502,6 +533,7 @@ var showHome = function() {
 var showSignUp = function() {
   $('#home').hide();
   $('#searchResults').hide();
+  $('#bookingDetails').hide();
 
   if (($.find('#signUp')).length == 0) {
     var link = document.querySelector('link[id=signUpPage]');
@@ -517,11 +549,6 @@ var showSignUp = function() {
       defaultDate: 1,
 
     });
-    $("#signInPassword").keyup(function(event){
-    if(event.keyCode == 13){
-        $("#signInBtn").click();
-    }
-});
   } else
     $('#signUp').show();
 };
@@ -557,6 +584,7 @@ var showAdminPanel = function() {
 
 var adminLogout = function(){
   loginUId = -1;
+  loginUsername = "";
   showHome();
 }
 
@@ -604,7 +632,7 @@ var addHotel = function(){
       }
     });
 }
-};
+}
 
 var deleteHotel = function() {
   var hotelsToDelete="";
@@ -726,7 +754,7 @@ var updateHotelDetails = function(){
     }
   });
       
-};
+}
 
 var validateHotelFields = function(id,name, unit, street, country, postal, contact, rating){
   var errorString = "Please correct the following errors: </br>";
@@ -771,7 +799,7 @@ var validateHotelFields = function(id,name, unit, street, country, postal, conta
 
   return errors;
 
-};
+}
 
 var fillDetailsForHotel = function() {
   var optionId = parseInt($(this).children(':selected').attr('id'));
@@ -848,7 +876,7 @@ var validateSignIn = function(username, password) {
   }
 
   return errors;
-};
+}
 
 var signIn = function() {
   $('#logout').bind('click', showLogout);
@@ -872,16 +900,14 @@ var signIn = function() {
         console.log(result);
 
         loginUId = result['uId'];
-        var name = result['name'];
+        loginUsername = result['name'];
         if (result['status'] == 'Success') {
           if(loginUId ==1)
             showAdminPanel();
           else
-         {
-          showConfirmBooking();
-//            showUpdateBooking();
+         {showConfirmBooking();
 
-          $('#displayName').html("Welcome " + name);
+          $('#displayName').html("Welcome " + loginUsername);
           showBookingRecord(loginUId);
         }
 
@@ -957,7 +983,7 @@ var validateSignUp = function(name, email, dob, username, password, confirmPassw
   }
 
   return errors;
-};
+}
 
       
 
@@ -993,23 +1019,24 @@ var signUp = function() {
 
           var name = result['name'];
           $('.alert-success').children('span').html("Hi " + name + ", your account has been successfully created!");
-          $('.alert-success').slideDown(500);
+          $('.alert-success').slideDown(500).delay(3000).slideUp(500);
 
         } else if (result['status'] == 'Fail') {
 
           $('.alert-success').children('span').html("Sign Up Failed!");
-          $('.alert-success').slideDown(500);
+          $('.alert-success').slideDown(500).delay(3000).slideUp(500);
         } else if (result['status'] == 'Exist') {
 
           $('.alert-success').children('span').html("Username is existing!");
-          $('.alert-success').slideDown(500);
+          $('.alert-success').slideDown(500).delay(3000).slideUp(500);
         }
 
       }
 
     });
-  };
+  }
 };
+
 
 var refreshBookingTable = function() {
   roomTypeData="";
