@@ -774,6 +774,7 @@ var fillDetailsForHotel = function() {
 var addRangeSelector = function() {
   $("#amount-slider").slider({
     range: true,
+    animate: true,
     min: 0,
     max: 500,
     values: [000, 500],
@@ -786,6 +787,7 @@ var addRangeSelector = function() {
 
   $("#rating-slider").slider({
     range: true,
+    animate: true,
     min: 0,
     max: 5,
     values: [0, 5],
