@@ -10,11 +10,12 @@ $checkInDate = $_GET['checkInDate'];
 $checkOutDate = $_GET['checkOutDate'];
 
 
-$stmt = mysqli_prepare($con, "SELECT r.roomNo, r.price, c.cname FROM room r, category c WHERE r.hId=? AND r.cId=? AND r.cId = c.cId AND r.roomNo NOT IN (SELECT roomNo FROM booking b WHERE (b.hid = r.hid AND b.roomNo = r.roomNo) AND ((b.checkInDate <= ? AND DATE_ADD(b.checkInDate,INTERVAL b.duration DAY) >=?) OR (b.checkInDate >= ? AND b.checkInDate <= ?)))");
+$stmt = mysqli_prepare($con, "SELECT r.roomNo, r.price, c.cname FROM room r, category c WHERE r.hId=? AND r.cId=? AND r.cId = c.cId AND r.roomNo NOT IN (SELECT roomNo FROM booking b WHERE (b.hid = r.hid AND b.roomNo = r.roomNo) AND ((b.checkInDate <= ? AND DATE_ADD(b.checkInDate,INTERVAL b.duration DAY) >=?) OR (b.checkInDate >= ? AND b.checkInDate <= ?))) limit 1");
 
 mysqli_stmt_bind_param($stmt, 'ssssss', $hId, $cId, $checkInDate, $checkInDate, $checkInDate, $checkOutDate);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $roomNo, $price, $cName);
+
 
 	$result = array();
     $num_rows =0;
