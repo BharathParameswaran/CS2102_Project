@@ -35,7 +35,7 @@
 			$row = mysqli_fetch_array($result);
 
 			if ($row['noBooking'] == 0 && $roomType == -1) {
-				mysqli_query($con,"UPDATE booking SET checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId);
+				mysqli_query($con,"UPDATE booking SET checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId . " AND '" . $checkInDate . "' > date_add(now(), interval 1 day)");
 			} else {
 				if ($roomType != -1) 
 					$result = mysqli_query($con,"select room.roomNo, category.maxGuests from room, category where room.cId = " . $roomType . " and room.hId = (select hId from booking where bId = " . $bookingId . ") and room.cId = category.cId  and room.roomNo not in 
@@ -48,7 +48,7 @@
 				$row = mysqli_fetch_array($result);
 				$newRoom = $row['roomNo'];
 				$maxGuests = $row['maxGuests'];
-				mysqli_query($con,"UPDATE booking SET roomNo = '" . $newRoom . "', guests = " . $maxGuests . ", checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId);
+				mysqli_query($con,"UPDATE booking SET roomNo = '" . $newRoom . "', guests = " . $maxGuests . ", checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId . " AND '" . $checkInDate . "' > date_add(now(), interval 1 day)");
 			}
 		}
 

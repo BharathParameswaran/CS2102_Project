@@ -23,13 +23,13 @@
 				$roomNo = $_GET["roomNo"];
 
 				$result = mysqli_query($con,"select count(*) as noBooking from booking B1 
-				where B1.roomNo = " . $roomNo . " AND ((B1.checkInDate <= '" . $checkInDate . "' AND date_add(B1.checkInDate, interval B1.duration day) >= '" . $checkInDate . "')
+				where B1.roomNo = " . $roomNo . " AND B1.hId = (select B2.hId from booking B2 where B2.bId = " . $bookingId . ") AND ((B1.checkInDate <= '" . $checkInDate . "' AND date_add(B1.checkInDate, interval B1.duration day) >= '" . $checkInDate . "')
 					OR (B1.checkInDate <= date_add('" . $checkInDate . "', interval " . $duration . " day) 
 						AND date_add(B1.checkInDate, interval B1.duration day) >= date_add('" . $checkInDate . "', interval " . $duration . " day)))");
 				$row = mysqli_fetch_array($result);
 
 				if ($row['noBooking'] == 0) {
-					mysqli_query($con,"UPDATE booking SET roomNo = " . $roomNo . ", checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId);
+					mysqli_query($con,"UPDATE booking SET roomNo = " . $roomNo . ", checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId . " AND '" . $checkInDate . "' > date_add(now(), interval 1 day)");
 				}
 			}
 			
