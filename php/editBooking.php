@@ -37,7 +37,12 @@
 			if ($row['noBooking'] == 0 && $roomType == -1) {
 				mysqli_query($con,"UPDATE booking SET checkInDate='" . $checkInDate . "', duration = " . $duration . " WHERE bId = " . $bookingId . " AND uId = " . $userId);
 			} else {
-				$result = mysqli_query($con,"select room.roomNo, category.maxGuests from room, category where room.cId = " . $roomType . " and room.hId = (select hId from booking where bId = " . $bookingId . ") and room.cId = category.cId  and room.roomNo not in 
+				if ($roomType != -1) 
+					$result = mysqli_query($con,"select room.roomNo, category.maxGuests from room, category where room.cId = " . $roomType . " and room.hId = (select hId from booking where bId = " . $bookingId . ") and room.cId = category.cId  and room.roomNo not in 
+					(select B1.roomNo from booking B1 where B1.hId = (select hId from booking where bId = " . $bookingId . ") and ((B1.checkInDate <= '" . $checkInDate . "' AND date_add(B1.checkInDate, interval B1.duration day) >= '" . $checkInDate . "')
+					OR (B1.checkInDate <= date_add('" . $checkInDate . "', interval " . $duration . " day) AND  date_add(B1.checkInDate, interval B1.duration day) >= date_add('" . $checkInDate . "', interval " . $duration . " day)))) order by rand() limit 1");
+				else
+					$result = mysqli_query($con,"select room.roomNo, category.maxGuests from room, category where room.cId = (select distinct R.cId from room R, booking B where B.bId = " . $bookingId . " and B.roomNo = R.roomNo) and room.hId = (select hId from booking where bId = " . $bookingId . ") and room.cId = category.cId  and room.roomNo not in 
 					(select B1.roomNo from booking B1 where B1.hId = (select hId from booking where bId = " . $bookingId . ") and ((B1.checkInDate <= '" . $checkInDate . "' AND date_add(B1.checkInDate, interval B1.duration day) >= '" . $checkInDate . "')
 					OR (B1.checkInDate <= date_add('" . $checkInDate . "', interval " . $duration . " day) AND  date_add(B1.checkInDate, interval B1.duration day) >= date_add('" . $checkInDate . "', interval " . $duration . " day)))) order by rand() limit 1");
 				$row = mysqli_fetch_array($result);

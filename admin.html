@@ -46,7 +46,7 @@
 
 
             <div class="tab-pane fade" id="modifyHotel">
-              <select class="form-group form-control" id="modify-hotel">
+              <select class="form-group form-control" id="modify-hotel" placeholder="First name">
                
               </select>
 
@@ -79,14 +79,14 @@
 
             <div class="tab-pane fade" id="manageBooking">
               <div class="row">
-                <div class="col-md-12" style="height: 350px; overflow: scroll;">
+                <div class="col-md-12" style="height: 320px; overflow: scroll;">
                   <table class="table table-bordered" id="adminBookingTable">
                          <thead>
                            <tr>
-                             <th>Booking Id</th>
+                             <th>Id</th>
                              <th>User Id</th>
                              <th>Hotel Name</th>
-                             <th>Room No</th>
+                             <th width="100">Room No</th>
                              <th>Room Type</th>
                              <th>Booking Date</th>
                              <th width="150">Check In Date</th>
@@ -99,6 +99,14 @@
                          <tbody>
                          </tbody>
                     </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="btn-group" align="right" style="padding-top: 10px">
+                  <button type="button" class="btn btn-default" onclick="adminManageBookingSort(1)">BookingId</button>
+                  <button type="button" class="btn btn-default" onclick="adminManageBookingSort(2)">User Name</button>
+                  <button type="button" class="btn btn-default" onclick="adminManageBookingSort(3)">Hotel Name</button>
+                  <button type="button" class="btn btn-default" onclick="adminManageBookingSort(4)">Booking Date</button>
                 </div>
               </div>
             </div>
