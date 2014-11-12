@@ -8,14 +8,14 @@ $reply['rows'] = 0;
 $UId = $_GET['uId'];
 
 
-$stmt = mysqli_prepare($con, "SELECT DISTINCT b.bId, h.hname, h.unitNo, h.streetName, h.country, h.postalCode, h.contact, c.cname, b.bookingDate, b.checkInDate, b.duration, b.status, r.price, (b.duration*r.price) AS price
+$stmt = mysqli_prepare($con, "SELECT DISTINCT b.bId, h.hname, h.unitNo, h.streetName, h.country, h.postalCode, h.contact, c.cname, b.bookingDate, b.checkInDate, b.duration, b.roomNo, b.status, r.price, (b.duration*r.price) AS price
     FROM booking b, user u, hotel h, category c, room r
-WHERE u.uId=? AND u.uId=b.uId AND h.hId=b.hId AND r.hId = h.hId AND c.cId = r.cId GROUP BY b.bId;");
+WHERE u.uId=? AND u.uId=b.uId AND h.hId=b.hId AND r.hId = b.hId AND c.cId = r.cId AND b.roomNo = r.roomNo GROUP BY b.bId;");
 
 
 mysqli_stmt_bind_param($stmt, 's', $UId);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $bId, $hName, $unitNo, $street, $country, $postalCode, $contact, $roomName, $bookingDate, $checkInDate, $duration, $status, $roomPrice, $totalPrice);
+mysqli_stmt_bind_result($stmt, $bId, $hName, $unitNo, $street, $country, $postalCode, $contact, $roomName, $bookingDate, $checkInDate, $duration, $roomNo, $status, $roomPrice, $totalPrice);
 
 
 	$result = array();
@@ -35,6 +35,7 @@ mysqli_stmt_bind_result($stmt, $bId, $hName, $unitNo, $street, $country, $postal
     	$booking['bookingDate'] = $bookingDate;
     	$booking['checkInDate'] = $checkInDate;
     	$booking['duration'] = $duration;
+        $booking['roomNo'] = $roomNo;
     	$booking['status'] = $status;
         $booking['roomPrice'] = $roomPrice;
         $booking['totalPrice'] = $totalPrice;
