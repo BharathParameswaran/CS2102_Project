@@ -1,6 +1,5 @@
 $(function() {
   showHome();
-
 });
 
 var loginUId = -1;
@@ -1059,8 +1058,15 @@ var refreshBookingTableAdmin = function() {
 
   url = "php/adminBooking.php?action=";
     jQuery.getJSON(url, function (data) {
-    updateTableAdmin(data);
-  });
+      updateTableAdmin(data);
+    });
+};
+
+var adminManageBookingSort = function(sortId) {
+  url = "php/adminBooking.php?action=sort&attr=" + sortId;
+    jQuery.getJSON(url, function (data) {
+      updateTableAdmin(data);
+    });
 };
 
 var updateTable = function(data, roomTypeData) {
@@ -1088,7 +1094,7 @@ var updateTableAdmin = function(data) {
   $('#adminBookingTable tbody').remove();
   $('#adminBookingTable tbody').remove();
   for (i = 0; i < data.length; i++) {
-      $('#adminBookingTable').append('<tr><td>' + data[i].bId + '</td><td>' + data[i].uId + '</td><td>' + data[i].hName + '</td><td>' + data[i].roomNo + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButtonAdmin' + data[i].bId + '" class="btn btn-primary" onclick="alterTableAdmin(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Cancel</button></td><td><button class="btn btn-primary" onclick="deleteBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Delete</button></td>');
+      $('#adminBookingTable').append('<tr><td>' + data[i].bId + '</td><td>' + data[i].name + '</td><td>' + data[i].hName + '</td><td>' + data[i].roomNo + '</td><td>' + data[i].roomCat + '</td><td>' + data[i].bookingDate + '</td><td>' + data[i].checkInDate + '</td><td>' + data[i].duration + '</td><td>' + data[i].status + '</td><td><input type="button" id="updateButtonAdmin' + data[i].bId + '" class="btn btn-primary" onclick="alterTableAdmin(' + data[i].bId + ')" value="Update"/><td><button class="btn btn-primary" onclick="cancelBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Cancel</button></td><td><button class="btn btn-primary" onclick="deleteBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ')">Delete</button></td>');
 
       $('#adminBookingTable').append('<tr id="rowAdmin' + data[i].bId + '" style="display: none"><td></td><td></td><td></td><td><input type="text" id="roomNo' + data[i].bId + '" value="' + data[i].roomNo + '" size="1"></td><td></td><td></td><td><input type="text" class="form-control" id="admin_datepicker' + data[i].bId + '"" value="' + data[i].checkInDate + '"  size="10">' + '</td><td><input type="text" id="durationAdmin' + data[i].bId + '" value="' + data[i].duration + '" size="1"></td><td></td><td colspan = "2"><button class="btn btn-primary" onclick="updateBookingAdmin(' + data[i].bId + ', ' + data[i].uId + ', ' + data[i].roomNo + ')">Confirm</button></td>');
 
