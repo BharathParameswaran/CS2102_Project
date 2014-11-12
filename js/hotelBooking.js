@@ -327,12 +327,23 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
         var roomNo = room[index]['roomNo'];
         var categoryName = room[index]['cName'];
         var price = room[index]['price'];
+        var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+        var duration = Math.floor(( Date.parse(checkOutDate) - Date.parse(checkInDate) ) / oneDay);
+        var bookingDate =  formatDate(new Date());
+        var guests = 2;
+        var status = "confirmed";
+
+        if (duration == 0){
+          duration = 1;
+        }
         showBookingDetails();
+        $('#detailsReturned').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price + " per day." + "<br>" + "Total Amount is = $" + price*duration + " for " + duration + " days.");
+        getHotelDetails(result['answer']);
         if (loginUsername != ""){
         $('#bookingDisplayName').html("Welcome " + loginUsername);
         }
-        $('#detailsReturned').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price);
-        getHotelDetails(result['answer']);
+        $('#confirmMakeBooking').bind('click', createBooking(loginUId, hId, roomNo, bookingDate, checkInDate, duration, guests, status));
+        
 
       }
 
@@ -347,7 +358,7 @@ var getHotelDetails = function(hotelDetails) {
     var hotel = $('<div>').addClass('list-group-item-heading').attr('hId', hotelDetails[index]['hId'])
       .append($('<a>').html(hotelDetails[index]['hName']));
     hotel.append($('<div>').addClass('row')
-      .append($('<p>').addClass('col-md-8').html(hotelDetails[index]['unitNo'] + ", " + hotelDetails[index]['street'] + ", " + hotelDetails[index]['country'] + " (" + hotelDetails[index]['postalCode'] + ")")));
+      .append($('<p>').addClass('col-md-8').html(hotelDetails[index]['unitNo'] + ", " + hotelDetails[index]['street'] + ", " + hotelDetails[index]['country'] + " (" + hotelDetails[index]['postal'] + ")")));
     hotel.append($('<p>').html("Hotel contact: " + hotelDetails[index]['contact']));
     hotel.append($('<p>').html("Hotel Rating: " + hotelDetails[index]['rating']));
 
@@ -358,6 +369,7 @@ var getHotelDetails = function(hotelDetails) {
   $('#detailsReturned').append(hotelDiv);
 
 }
+
 
 var showLogout = function() {
   loginUId = -1;
@@ -412,7 +424,7 @@ var showBookingDetails = function() {
     var link = document.querySelector('link[id=bookingDetailsPage]');
     var content = link.import.querySelector('#bookingDetails');
     document.body.appendChild(document.importNode(content, true));
-    $('#confirmMakeBooking').bind('click', createBooking);
+
     $('#cancelBooking').bind('click', showHotels);
     $('#bookingLogout').bind('click', showLogout);
     $('#bookingCreateAcc').bind('click', showSignUp);
@@ -431,7 +443,6 @@ var showBookingDetails = function() {
 
   }
 };
-
 
 var createBooking = function(uId, hId, roomNo, bookingDate, checkInDate, duration, guests, status) {
 

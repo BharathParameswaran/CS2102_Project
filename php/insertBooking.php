@@ -38,6 +38,7 @@ mysqli_stmt_fetch($stmt);
     }
     else{
        		$reply['status'] = 'Exist';
+            $reply['bId'] = $bId;
     }
 
    
