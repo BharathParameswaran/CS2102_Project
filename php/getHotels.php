@@ -42,7 +42,7 @@ mysqli_stmt_bind_result($stmt, $id, $name, $street,$country, $rating, $count);
     }
 
 $facilities = array();
-$result = mysqli_query($con, "select * from facilities");
+$result = mysqli_query($con, "select * from facilities order by fname");
 while ($row = mysqli_fetch_array($result)) {
     $facility = array("id" => $row['fId'], "name" => $row['fname']);
     array_push($facilities, $facility);

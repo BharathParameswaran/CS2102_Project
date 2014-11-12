@@ -5,7 +5,7 @@ if($con){
 $reply['status'] = 'ok';
 
 
-$stmt = mysqli_prepare($con, "select * from hotel");
+$stmt = mysqli_prepare($con, "select * from hotel order by hname");
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $id, $name,$unit, $street,$country, $postal,$contact, $rating);
 
@@ -29,7 +29,7 @@ mysqli_stmt_bind_result($stmt, $id, $name,$unit, $street,$country, $postal,$cont
     }
 
 $facilities = array();
-$result = mysqli_query($con, "select * from facilities");
+$result = mysqli_query($con, "select * from facilities order by fname");
 while ($row = mysqli_fetch_array($result)) {
     $facility = array("id" => $row['fId'], "name" => $row['fname']);
     array_push($facilities, $facility);

@@ -45,17 +45,14 @@ WHERE T.hid = h.hid
        OR country LIKE ?)
   AND rating >= ?
   AND rating <= ?
-  AND T.hid IN
-    (SELECT hotel.hid
-     FROM facilitymapping f
-     INNER JOIN hotel ON hotel.hid = f.hid
-     INNER JOIN facilities fac ON fac.fid = f.fid ";
+  ";
      
      if($numF > 0){
-      $query .=  "WHERE f.fid REGEXP '" . $fac 
-      . "' GROUP BY hotel.hid HAVING COUNT(*) = " . $numF;
+      $query .= " AND EXISTS (SELECT f.hid FROM facilitymapping f WHERE f.hid = 
+        T.hid AND f.fid REGEXP '" . $fac . "' GROUP BY f.hid 
+        HAVING COUNT(*) >= ". $numF. ") ";     
      }
-     $query .= ");" ;
+
 
     
 $stmt = mysqli_prepare($con, $query);

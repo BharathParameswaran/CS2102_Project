@@ -44,16 +44,16 @@
 				} else {
 					$sortAttr = "B.checkInDate";
 				}
-
-				$result = mysqli_query($con,"SELECT DISTINCT B.bId, U.name, H.hName, R.roomNo, C.cId, C.cname, B.bookingDate, B.checkInDate, B.duration, B.guests, B.status FROM booking B, hotel H, room R, category C, user U WHERE H.hId = B.hId AND B.roomNo = R.roomNo AND R.cId = C.cId and U.uId = B.uId ORDER BY " . $sortAttr);
+   
+				$result = mysqli_query($con,"SELECT B.bId, B.uId, U.name, H.hName, R.roomNo, C.cId, C.cname, B.bookingDate, B.checkInDate, B.duration, B.guests, B.status FROM booking B, hotel H, room R, category C, user U WHERE H.hId = B.hId AND B.roomNo = R.roomNo AND R.hId = B.hId AND R.cId = C.cId and U.uId = B.uId ORDER BY " . $sortAttr);
 				while ($row = mysqli_fetch_array($result)) {
-					$booking = array("bId" => $row['bId'], "name" => $row['name'], "hName" => $row['hName'], "roomNo" => $row['roomNo'], "roomCatId" => $row['cId'], "roomCat" => $row['cname'], "bookingDate" => $row['bookingDate'], "checkInDate" => $row['checkInDate'], "duration" => $row['duration'], "guests" => $row['guests'], "status" => $row['status']);
+					$booking = array("bId" => $row['bId'], "uId" => $row['uId'], "name" => $row['name'], "hName" => $row['hName'], "roomNo" => $row['roomNo'], "roomCatId" => $row['cId'], "roomCat" => $row['cname'], "bookingDate" => $row['bookingDate'], "checkInDate" => $row['checkInDate'], "duration" => $row['duration'], "guests" => $row['guests'], "status" => $row['status']);
 					array_push($resultArray, $booking);
 				}	
 			} else {
-				$result = mysqli_query($con,"SELECT DISTINCT B.bId, U.name, H.hName, R.roomNo, C.cId, C.cname, B.bookingDate, B.checkInDate, B.duration, B.guests, B.status FROM booking B, hotel H, room R, category C, user U WHERE H.hId = B.hId AND B.roomNo = R.roomNo AND R.cId = C.cId and U.uId = B.uId ORDER BY B.bId");
+				$result = mysqli_query($con,"SELECT B.bId, B.uId, U.name, H.hName, R.roomNo, C.cId, C.cname, B.bookingDate, B.checkInDate, B.duration, B.guests, B.status FROM booking B, hotel H, room R, category C, user U WHERE H.hId = B.hId AND B.roomNo = R.roomNo AND R.hId = B.hId AND R.cId = C.cId and U.uId = B.uId ORDER BY B.bId");
 				while ($row = mysqli_fetch_array($result)) {
-					$booking = array("bId" => $row['bId'], "name" => $row['name'], "hName" => $row['hName'], "roomNo" => $row['roomNo'], "roomCatId" => $row['cId'], "roomCat" => $row['cname'], "bookingDate" => $row['bookingDate'], "checkInDate" => $row['checkInDate'], "duration" => $row['duration'], "guests" => $row['guests'], "status" => $row['status']);
+					$booking = array("bId" => $row['bId'], "uId" => $row['uId'], "name" => $row['name'], "hName" => $row['hName'], "roomNo" => $row['roomNo'], "roomCatId" => $row['cId'], "roomCat" => $row['cname'], "bookingDate" => $row['bookingDate'], "checkInDate" => $row['checkInDate'], "duration" => $row['duration'], "guests" => $row['guests'], "status" => $row['status']);
 					array_push($resultArray, $booking);
 				}	
 			}
