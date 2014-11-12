@@ -1217,4 +1217,30 @@ var updateTableAdmin = function(data) {
           });
           } 
       }
+      if (originalRoomCat != document.getElementById("roomType" + id).value) {
+        url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("updateCheckIn" + id).value + "&duration=" + document.getElementById("duration" + id).value + "&roomType=" + document.getElementById("roomType" + id).value ;
+      } else {
+        url = "php/editBooking.php?userId=" + loginUId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("updateCheckIn" + id).value + "&duration=" + document.getElementById("duration" + id).value + "&roomType=-1";
+      }
+      jQuery.getJSON(url, function (data) {
+        refreshBookingTable();
+      });
+    } 
+  };
+
+  var updateBookingAdmin = function(id, userId, originalRoomNo) {
+    var r = confirm("Are you sure you want to update the booking?");
+    if (r == true) {
+      if (originalRoomNo != document.getElementById("roomNo" + id).value) {
+          url =  "php/adminBooking.php?userId=" + userId + "&bookingId=" + id + "&action=changeRoom&checkInDate=" + document.getElementById("admin_datepicker" + id).value + "&duration=" + document.getElementById("durationAdmin" + id).value + "&roomNo=" + document.getElementById("roomNo" + id).value;
+          jQuery.getJSON(url, function (data) {
+            refreshBookingTableAdmin();
+          });
+      } else {
+          url =  "php/editBooking.php?userId=" + userId + "&bookingId=" + id + "&action=edit&checkInDate=" + document.getElementById("admin_datepicker" + id).value + "&duration=" + document.getElementById("durationAdmin" + id).value + "&roomType=-1";
+          jQuery.getJSON(url, function (data) {
+            refreshBookingTableAdmin();
+          });
+          } 
+      }
   };
