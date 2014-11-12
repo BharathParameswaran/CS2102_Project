@@ -1225,8 +1225,7 @@ var updateTableAdmin = function(data) {
       jQuery.getJSON(url, function (data) {
         refreshBookingTable();
       });
-    } 
-  };
+    };
 
   var updateBookingAdmin = function(id, userId, originalRoomNo) {
     var r = confirm("Are you sure you want to update the booking?");
