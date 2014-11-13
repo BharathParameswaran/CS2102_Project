@@ -341,6 +341,7 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
         }
         $('#detailsReturned').html("The price for " + categoryName + " from " + checkInDate + " to " + checkOutDate + " is $ " + price + " per day." + "<br>" + "Total Amount is = $" + price*duration + " for " + duration + " days.");
         getHotelDetails(result['answer']);
+        /*
         $( "#confirmMakeBooking" ).bind( "click", function() {
           if(loginUId == -1)
           {
@@ -351,7 +352,9 @@ var showHotelDetails = function(hId, cId, checkInDate, checkOutDate) {
           {
             createBooking(loginUId, hId, roomNo, bookingDate, checkInDate, duration, guests, status);
           }
-    });
+        });
+        */
+
       }
 
     }
@@ -445,7 +448,7 @@ var showUpdateBooking = function() {
   });
 };  
 
-var showBookingDetails = function() {
+var showBookingDetails = function(uId, hId, roomNo, bookingDate, checkInDate, duration, guests, status) {
   $('#home').hide();
   $('#signUp').hide();
   $('#confirmBooking').hide();
@@ -454,6 +457,25 @@ var showBookingDetails = function() {
     var link = document.querySelector('link[id=bookingDetailsPage]');
     var content = link.import.querySelector('#bookingDetails');
     document.body.appendChild(document.importNode(content, true));
+    
+         $( "#confirmMakeBooking" ).bind( "click", function() {
+            var hId1 = hId;
+            var roomNo1 = roomNo;
+            var bookingDate1 = bookingDate;
+            var checkInDate1 = checkInDate;
+            var duration1 = duration;
+            var guests1 = guests;
+            var status1 = status;
+          if(loginUId == -1)
+          {
+            $('.alert-success').children('span').html("Please Sign In Before Confirm Booking!");
+            $('.alert-success').slideDown(500).delay(3000).slideUp(500);
+          } 
+          else
+          {
+            createBooking(loginUId, hId1, roomNo1, bookingDate1, checkInDate1, duration1, guests1, status1);
+          }
+    });
 
     $('#cancelBooking').bind('click', showHotels);
     $('#bookingLogout').bind('click', showLogout);
